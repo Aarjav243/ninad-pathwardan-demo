@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prof. Ninad Patwardhan — Psychologist of Memory</title>
+  <meta name="description" content="Prof. Ninad Patwardhan studies autobiographical memory, narrative identity, and well-being — with sustained focus on Partition survivors and the 1992–93 Mumbai riots.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+/* ============================================================
+   DESIGN TOKENS  —  "Indian Archive"
+   Every colour chosen from the physical world of his subjects:
+   the warm sand of Punjab and Sindh, the terracotta brick of
+   old Bombay, the ochre of turmeric and old photographs, the
+   deep ink of archival documents.
+   ============================================================ */
+:root {
+  --sand:    #EAE0C8;   /* aged paper — main bg              */
+  --sand2:   #E0D4B4;   /* slightly darker paper             */
+  --ash:     #F4EFE4;   /* lightest surface                  */
+  --dark:    #130E09;   /* warm near-black — old ink         */
+  --dark2:   #1E1610;   /* secondary dark                    */
+  --terra:   #8C2500;   /* terracotta — Partition, Indian earth */
+  --ochre:   #7A5C22;   /* turmeric gold — old photographs   */
+  --body:    #3A2C1A;   /* warm dark brown — body text       */
+  --muted:   #8A7250;   /* muted warm brown                  */
+  --ghost:   rgba(58,44,26,0.04);  /* bg ghost text          */
+
+  /* Dark section tokens */
+  --dk:      #130E09;
+  --dk2:     #1E1610;
+  --dkl:     #EAE0C8;
+  --dkm:     #7A6A50;
+  --dkb:     rgba(234,224,200,0.08);
+
+  --fd: 'Playfair Display', Georgia, serif;
+  --fb: 'Lora', Georgia, serif;
+  --fm: 'Space Mono', 'Courier New', monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --rule: rgba(58,44,26,0.15);
+  --rule-s: rgba(58,44,26,0.65);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--sand);
+  color: var(--body);
+  font-family: var(--fb);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+hr { border: none; }
+
+
+/* ============================================================
+   NAV
+   ============================================================ */
+#nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 300;
+  height: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 max(2rem, 4vw);
+  transition: background .4s, border-color .4s;
+  border-bottom: 1px solid transparent;
+}
+#nav.on {
+  background: rgba(234,224,200,0.95);
+  backdrop-filter: blur(10px);
+  border-color: var(--rule);
+}
+.nav-id {
+  font-family: var(--fm);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.nav-id strong { color: var(--body); }
+.nav-links {
+  list-style: none; display: flex; gap: 2rem;
+}
+.nav-links a {
+  font-family: var(--fm);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--terra); }
+.nav-ham {
+  display: none; background: none; border: none;
+  cursor: pointer; flex-direction: column; gap: 5px; padding: 4px;
+}
+.nav-ham span { display: block; width: 20px; height: 1px; background: var(--muted); transition: .3s; }
+
+
+/* ============================================================
+   HERO  —  The Two Dates
+   1947 and 1992–93 are the visual anchor. His name lives
+   between them. This is the story before any word is read.
+   ============================================================ */
+#hero {
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center;
+  padding: 80px max(2rem, 4vw) max(3rem, 5vh);
+  position: relative; overflow: hidden;
+  background: var(--sand);
+  text-align: center;
+}
+
+/* Ghosted "MEMORY" spanning the background */
+.hero-ghost {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none; user-select: none; overflow: hidden;
+}
+.hero-ghost span {
+  font-family: var(--fd);
+  font-weight: 700;
+  font-size: clamp(8rem, 22vw, 20rem);
+  line-height: 1;
+  color: var(--ghost);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.hero-body { position: relative; z-index: 2; width: 100%; max-width: 1100px; }
+
+/* The two dates flanking the name */
+.hero-dates {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeup .7s var(--ease) .1s forwards;
+}
+.date-block { text-align: left; }
+.date-block:last-child { text-align: right; }
+.date-yr {
+  font-family: var(--fd);
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 700;
+  color: var(--terra);
+  line-height: 1;
+  display: block;
+}
+.date-label {
+  font-family: var(--fm);
+  font-size: clamp(0.55rem, 1vw, 0.68rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* Thick rule separating dates from name */
+.hero-divider {
+  border-top: 2px solid var(--rule-s);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeup .5s var(--ease) .22s forwards;
+}
+
+/* The name */
+.hero-name {
+  font-family: var(--fd);
+  font-size: clamp(3rem, 8vw, 7.5rem);
+  font-weight: 400;
+  line-height: 0.92;
+  color: var(--dark);
+  letter-spacing: -0.015em;
+  opacity: 0;
+  animation: fadeup .9s var(--ease) .32s forwards;
+}
+.hero-name .prof {
+  font-family: var(--fm);
+  font-size: clamp(0.58rem, 1.1vw, 0.78rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  display: block;
+  margin-bottom: 0.6rem;
+}
+.hero-name em {
+  font-style: italic;
+  display: block;
+}
+
+/* Thin rule below name */
+.hero-divider2 {
+  border-top: 1px solid var(--rule-s);
+  margin: 2rem 0 1.75rem;
+  opacity: 0;
+  animation: fadeup .5s var(--ease) .54s forwards;
+}
+
+/* Institution line */
+.hero-inst {
+  font-family: var(--fm);
+  font-size: clamp(0.58rem, 1vw, 0.72rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeup .6s var(--ease) .64s forwards;
+}
+
+/* The driving question */
+.hero-question {
+  font-family: var(--fd);
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--dark);
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+  opacity: 0;
+  animation: fadeup .75s var(--ease) .76s forwards;
+}
+
+/* Research field tags */
+.hero-fields {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 0.5rem 1.5rem;
+  opacity: 0;
+  animation: fadeup .7s var(--ease) .9s forwards;
+}
+.hfield {
+  font-family: var(--fm);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.hfield::before { content: '— '; color: var(--terra); }
+
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ============================================================
+   THE QUESTION  —  full-width dark band
+   A monument inscription. His intellectual centre.
+   ============================================================ */
+#question {
+  background: var(--dark);
+  padding: 7rem max(2rem, 4vw);
+  text-align: center;
+  border-top: 1px solid rgba(234,224,200,0.1);
+}
+.q-inner { max-width: 860px; margin: 0 auto; }
+.q-label {
+  font-family: var(--fm);
+  font-size: 0.58rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--terra);
+  display: block;
+  margin-bottom: 2.5rem;
+}
+.q-text {
+  font-family: var(--fd);
+  font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--dkl);
+}
+.q-text em { font-style: normal; color: var(--terra); }
+.q-domains {
+  list-style: none;
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 1.75rem;
+  margin-top: 3rem;
+}
+.q-domains li {
+  font-family: var(--fm);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dkm);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.q-domains li::before {
+  content: '';
+  display: block; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--terra); opacity: .7;
+}
+
+
+/* ============================================================
+   ABOUT  —  Warm sand, two-column narrative
+   ============================================================ */
+#about { background: var(--sand); padding: 8rem max(2rem, 4vw); }
+.about-wrap { max-width: 1100px; margin: 0 auto; }
+
+.sec-eyebrow {
+  font-family: var(--fm);
+  font-size: 0.58rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--terra);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.sec-rule { border-top: 2px solid var(--rule-s); margin-bottom: 0.6rem; }
+.sec-h2 {
+  font-family: var(--fd);
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 400;
+  color: var(--dark);
+  line-height: 1.1;
+  margin-bottom: 3rem;
+}
+.sec-h2 em { font-style: italic; color: var(--terra); }
+
+/* Five-cell byline bar */
+.byline {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid var(--rule-s);
+  border-bottom: 1px solid var(--rule);
+  padding: 1.4rem 0;
+  margin-bottom: 3.5rem;
+}
+.bl {
+  padding: 0 1.2rem;
+  border-right: 1px solid var(--rule);
+}
+.bl:first-child { padding-left: 0; }
+.bl:last-child  { border-right: none; }
+.bl-k {
+  font-family: var(--fm);
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 0.3rem;
+}
+.bl-v {
+  font-family: var(--fb);
+  font-size: 0.88rem;
+  color: var(--body);
+  line-height: 1.5;
+}
+
+/* Two-column narrative */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+}
+.prose p {
+  font-family: var(--fb);
+  font-size: clamp(1rem, 1.6vw, 1.12rem);
+  line-height: 1.87;
+  color: var(--body);
+  margin-bottom: 1.15em;
+}
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--dark); font-weight: 600; }
+.prose em { font-style: italic; color: var(--terra); }
+
+/* Pull quote — spans both columns */
+.pullq {
+  border-top: 1px solid var(--rule-s);
+  border-bottom: 1px solid var(--rule);
+  padding: 2.25rem 0;
+  margin-top: 3rem;
+}
+.pullq blockquote {
+  font-family: var(--fd);
+  font-size: clamp(1.4rem, 2.7vw, 2.1rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--dark);
+  line-height: 1.45;
+  max-width: 860px;
+}
+.pullq cite {
+  display: block;
+  margin-top: 0.9rem;
+  font-family: var(--fm);
+  font-size: 0.55rem;
+  font-style: normal;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+
+/* ============================================================
+   RESEARCH  —  Dark, testimony-first cards
+   Each domain introduced by a human-scale statement FIRST.
+   What his research reveals about real people.
+   ============================================================ */
+#research {
+  background: var(--dk);
+  padding: 8rem max(2rem, 4vw);
+}
+.res-wrap { max-width: 1100px; margin: 0 auto; }
+.res-eyebrow {
+  font-family: var(--fm); font-size: 0.58rem;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--terra); display: block; margin-bottom: 0.5rem;
+}
+.res-rule { border-top: 2px solid rgba(234,224,200,0.35); margin-bottom: 0.6rem; }
+.res-h2 {
+  font-family: var(--fd);
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 400; color: var(--dkl); line-height: 1.1;
+  margin-bottom: 3.5rem;
+}
+
+.test-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--dkb);
+}
+.test-card {
+  background: var(--dk);
+  padding: 3rem;
+  transition: background .25s;
+}
+.test-card:hover { background: var(--dk2); }
+
+.tc-idx {
+  font-family: var(--fm);
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 1.25rem;
+  display: flex; align-items: center; gap: .75rem;
+}
+.tc-idx::after {
+  content: ''; flex: 1; max-width: 36px;
+  height: 1px; background: rgba(140,37,0,.4);
+}
+
+/* The testimony — the human statement comes FIRST */
+.tc-testimony {
+  font-family: var(--fd);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--dkl);
+  line-height: 1.45;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--dkb);
+}
+
+.tc-title {
+  font-family: var(--fd);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--dkl);
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+.tc-method {
+  font-family: var(--fm);
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dkm);
+  margin-bottom: 0.9rem;
+}
+.tc-desc {
+  font-family: var(--fb);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--dkm);
+}
+
+
+/* ============================================================
+   TIMELINE STRIP  —  The arc of his intellectual life
+   1947 → 1992-93 → first paper → Memory Studies → Peace Psych
+   ============================================================ */
+#timeline-strip {
+  background: var(--terra);
+  padding: 2rem max(2rem, 4vw);
+  overflow-x: auto;
+}
+.ts-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  gap: 0; min-width: 600px;
+}
+.ts-node {
+  flex: 1;
+  position: relative;
+  text-align: center;
+}
+.ts-node::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 50%; transform: translateY(-50%);
+  width: 1px; height: 28px;
+  background: rgba(234,224,200,.3);
+}
+.ts-node:last-child::after { display: none; }
+.ts-yr {
+  font-family: var(--fd);
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: #F5ECD6;
+  line-height: 1;
+  display: block;
+}
+.ts-ev {
+  font-family: var(--fm);
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,236,214,.55);
+  display: block;
+  margin-top: 0.3rem;
+}
+
+
+/* ============================================================
+   PUBLICATIONS  —  Archive entries
+   ============================================================ */
+#publications { background: var(--ash); padding: 8rem max(2rem, 4vw); }
+.pubs-wrap { max-width: 1100px; margin: 0 auto; }
+.pubs-wrap .sec-eyebrow { color: var(--terra); }
+.pubs-wrap .sec-h2 { color: var(--dark); }
+
+.pub-entry {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 2rem;
+  padding: 2.25rem 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.pub-entry:last-child { border-bottom: 1px solid var(--rule); }
+.pub-ref {
+  font-family: var(--fm);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--terra);
+  letter-spacing: .04em;
+  padding-top: .1rem;
+  line-height: 1.4;
+}
+.pub-title {
+  font-family: var(--fd);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--dark);
+  line-height: 1.38;
+  margin-bottom: .3rem;
+}
+.pub-journal {
+  font-family: var(--fb);
+  font-size: .9rem;
+  font-style: italic;
+  color: var(--body);
+  margin-bottom: .3rem;
+}
+.pub-auth {
+  font-family: var(--fm);
+  font-size: .58rem;
+  color: var(--muted);
+  margin-bottom: .85rem;
+  letter-spacing: .03em;
+  line-height: 1.5;
+}
+.pub-auth strong { color: var(--body); }
+/* What it actually found — in human terms */
+.pub-find {
+  background: rgba(140,37,0,.06);
+  border-left: 2px solid var(--terra);
+  padding: .65rem 1rem;
+  margin-bottom: .85rem;
+  font-family: var(--fb);
+  font-size: .88rem;
+  font-style: italic;
+  color: var(--body);
+  line-height: 1.6;
+}
+.pub-doi {
+  font-family: var(--fm);
+  font-size: .57rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--terra);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  opacity: .75; transition: opacity .2s;
+}
+.pub-doi:hover { opacity: 1; }
+
+
+/* ============================================================
+   JOURNEY  —  Quiet, clean record
+   ============================================================ */
+#journey { background: var(--sand2); padding: 8rem max(2rem, 4vw); }
+.journey-wrap { max-width: 1100px; margin: 0 auto; }
+.journey-wrap .sec-eyebrow { color: var(--terra); }
+.journey-cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+}
+.j-col-head {
+  font-family: var(--fm);
+  font-size: .57rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  padding-bottom: .65rem;
+  border-bottom: 2px solid var(--rule-s);
+  margin-bottom: 0;
+}
+.j-row {
+  display: grid; grid-template-columns: 72px 1fr; gap: .9rem;
+  padding: 1.1rem 0; border-bottom: 1px solid var(--rule);
+}
+.j-when {
+  font-family: var(--fm);
+  font-size: .57rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--terra);
+  padding-top: .12rem;
+}
+.j-place {
+  font-family: var(--fd);
+  font-size: 1.02rem;
+  color: var(--dark);
+  line-height: 1.22; margin-bottom: .15rem;
+}
+.j-role {
+  font-family: var(--fb);
+  font-size: .87rem;
+  font-style: italic;
+  color: var(--muted);
+}
+.edu-item {
+  padding: 1.15rem 0; border-bottom: 1px solid var(--rule);
+}
+.edu-deg {
+  font-family: var(--fd);
+  font-size: 1.02rem;
+  color: var(--dark); margin-bottom: .2rem;
+}
+.edu-uni {
+  font-family: var(--fb);
+  font-size: .87rem;
+  font-style: italic;
+  color: var(--body); margin-bottom: .22rem;
+}
+.edu-badge {
+  font-family: var(--fm);
+  font-size: .52rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--terra); opacity: .7;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--dark);
+  padding: 4.5rem max(2rem, 4vw) 3.5rem;
+}
+.foot-wrap { max-width: 1100px; margin: 0 auto; }
+.foot-top {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 3rem; align-items: end;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(234,224,200,.09);
+  margin-bottom: 1.75rem;
+}
+.foot-name {
+  font-family: var(--fd);
+  font-size: 1.9rem;
+  font-style: italic; font-weight: 400;
+  color: #EAE0C8; margin-bottom: .3rem;
+}
+.foot-sub {
+  font-family: var(--fb);
+  font-size: .9rem;
+  font-style: italic;
+  color: #6A5E48;
+}
+.foot-r { text-align: right; }
+.foot-rl {
+  font-family: var(--fm);
+  font-size: .52rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #504438; margin-bottom: .35rem;
+}
+.foot-rn {
+  font-family: var(--fd);
+  font-size: .98rem;
+  font-style: italic;
+  color: var(--terra);
+}
+.foot-base {
+  display: flex; justify-content: space-between;
+  font-family: var(--fm);
+  font-size: .56rem;
+  color: #3A3028; letter-spacing: .04em;
+}
+
+
+/* ============================================================
+   SCROLL REVEALS
+   ============================================================ */
+.rv { opacity: 0; transform: translateY(20px); transition: opacity .82s var(--ease), transform .82s var(--ease); }
+.rv.in { opacity: 1; transform: none; }
+.d1 { transition-delay: .08s; } .d2 { transition-delay: .17s; }
+.d3 { transition-delay: .27s; } .d4 { transition-delay: .36s; }
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .test-grid { grid-template-columns: 1fr; }
+  .journey-cols { gap: 3.5rem; }
+  .byline { grid-template-columns: repeat(3,1fr); }
+  .byline .bl:nth-child(3) { border-right: none; }
+  .byline .bl:nth-child(4) { padding-left: 0; border-right: 1px solid var(--rule); }
+}
+@media (max-width: 768px) {
+  #nav { padding: 0 1.5rem; }
+  .nav-links { display:none; flex-direction:column; position:fixed; top:0; right:0; bottom:0; width:72vw; background:var(--sand); padding:4.5rem 2rem 2rem; gap:1.75rem; border-left:1px solid var(--rule); z-index:400; }
+  .nav-links.open { display:flex; }
+  .nav-ham { display:flex; }
+
+  #hero { padding: 80px 1.5rem max(3rem,5vh); text-align: left; align-items: flex-start; }
+  .hero-dates { flex-direction: column; gap: 1.5rem; }
+  .hero-fields { justify-content: flex-start; }
+  .hero-question { margin-left: 0; text-align: left; }
+
+  #question { padding: 5.5rem 1.5rem; }
+  #about, #publications, #journey { padding: 5.5rem 1.5rem; }
+  #research { padding: 5.5rem 1.5rem; }
+  .two-col { grid-template-columns: 1fr; gap: 1.5rem; }
+  .byline { grid-template-columns: 1fr 1fr; gap: 1rem; border: none; }
+  .bl { border: none; padding: 0; }
+  .journey-cols { grid-template-columns: 1fr; }
+  .pub-entry { grid-template-columns: 3.5rem 1fr; gap: 1.25rem; }
+  footer { padding: 3.5rem 1.5rem; }
+  .foot-top { grid-template-columns: 1fr; gap: 1.5rem; }
+  .foot-r { text-align: left; }
+  .foot-base { flex-direction: column; gap: .4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+  </style>
+</head>
+<body>
+
+<!-- ════ NAV ════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <span class="nav-id"><strong>Ninad Patwardhan</strong> · Psychologist of Memory</span>
+  <button class="nav-ham" id="nav-ham" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#journey">Journey</a></li>
+  </ul>
+</nav>
+
+
+<!-- ════ HERO — The Two Dates ════ -->
+<section id="hero" aria-labelledby="hero-h1">
+  <div class="hero-ghost" aria-hidden="true">
+    <span>MEMORY</span>
+  </div>
+
+  <div class="hero-body">
+    <!-- 1947 on left, 1992-93 on right — his research subjects -->
+    <div class="hero-dates" aria-label="Research contexts">
+      <div class="date-block">
+        <span class="date-yr">1947</span>
+        <span class="date-label">Partition of India</span>
+      </div>
+      <div class="date-block">
+        <span class="date-yr" style="text-align:right">1992–93</span>
+        <span class="date-label" style="text-align:right">Mumbai Riots</span>
+      </div>
+    </div>
+
+    <hr class="hero-divider" aria-hidden="true">
+
+    <h1 class="hero-name" id="hero-h1">
+      <span class="prof">Prof.</span>
+      Ninad<em>Patwardhan</em>
+    </h1>
+
+    <hr class="hero-divider2" aria-hidden="true">
+
+    <p class="hero-inst">
+      Psychologist of Memory &nbsp;·&nbsp; FLAME University, Pune &nbsp;·&nbsp; PhD · IIT Bombay
+    </p>
+
+    <p class="hero-question">
+      "What do people do with the past when the past was violent —
+      and how does the story they tell about it
+      shape who they become?"
+    </p>
+
+    <div class="hero-fields" aria-label="Research areas">
+      <span class="hfield">Autobiographical Memory</span>
+      <span class="hfield">Narrative Identity</span>
+      <span class="hfield">Expressive Writing</span>
+      <span class="hfield">Peace Psychology</span>
+      <span class="hfield">Well-being</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ THE QUESTION BAND ════ -->
+<section id="question" aria-label="Research philosophy">
+  <div class="q-inner">
+    <span class="q-label rv">Core Inquiry</span>
+    <p class="q-text rv d1">
+      Memory is not a record of what happened.
+      It is a construction of who we needed to be
+      <em>after</em> it did.
+    </p>
+    <ul class="q-domains rv d2">
+      <li>Autobiographical Memory</li>
+      <li>Partition 1947</li>
+      <li>Mumbai 1992–93</li>
+      <li>Narrative Identity</li>
+      <li>Expressive Writing</li>
+      <li>Peace Psychology</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ════ ABOUT ════ -->
+<section id="about" aria-labelledby="about-h2">
+  <div class="about-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">The Story</span>
+      <h2 class="sec-h2" id="about-h2">
+        A psychologist who sits with<br><em>what history leaves behind</em>
+      </h2>
+    </div>
+
+    <!-- Byline bar -->
+    <div class="byline rv d1" role="complementary" aria-label="Profile">
+      <div class="bl"><div class="bl-k">Position</div><div class="bl-v">Assistant Professor<br>FLAME University, Pune</div></div>
+      <div class="bl"><div class="bl-k">Doctorate</div><div class="bl-v">PhD · IIT Bombay<br>Psychology</div></div>
+      <div class="bl"><div class="bl-k">Clinical</div><div class="bl-v">M.Sc. Clinical Psych.<br>Christ University</div></div>
+      <div class="bl"><div class="bl-k">Method</div><div class="bl-v">Qualitative<br>Narrative Analysis</div></div>
+      <div class="bl"><div class="bl-k">Published</div><div class="bl-v">5 peer-reviewed works<br>2011 – 2025</div></div>
+    </div>
+
+    <div class="two-col rv d2">
+      <div class="prose">
+        <p>
+          Prof. Ninad Patwardhan works at a precise and unusual crossroads:
+          between the clinical study of memory and the lived experience of
+          historical catastrophe. Trained in clinical psychology at Christ University,
+          Bangalore, and holding his doctorate from <strong>IIT Bombay</strong>,
+          he has spent his career studying not memory as an abstract cognitive process,
+          but memory as something people <em>do</em> — rebuild, perform, and negotiate
+          in the face of displacement and violence.
+        </p>
+        <p>
+          His sustained research brings him into contact with <strong>Punjabi and
+          Sindhi survivors of the 1947 Partition</strong> — communities uprooted
+          in one of history's largest forced migrations. His 2020 paper in
+          <em>Memory Studies</em> showed that ethnic identity shapes not merely
+          what is remembered, but the very structure of selfhood built around that memory:
+          two communities, one catastrophe, two different ways of knowing who you are.
+        </p>
+      </div>
+      <div class="prose">
+        <p>
+          His most recent work — published in 2025 in <em>Peace and Conflict:
+          Journal of Peace Psychology</em> — examines how survivors of the
+          <strong>1992–93 Mumbai riots</strong> narrate those events decades later.
+          These testimonies reveal the psychological conditions under which peace —
+          not merely the absence of violence — becomes possible at the personal level.
+        </p>
+        <p>
+          Running alongside this is his clinical research on
+          <strong>expressive writing and health outcomes</strong>:
+          the empirical demonstration that putting difficult personal
+          experience into language produces measurable improvements in wellbeing.
+          It is the same insight approached from a different direction —
+          narrative is not merely how we recall the past, it is how we survive it.
+          At FLAME University, Pune, he brings this entire body of work
+          into the classroom.
+        </p>
+      </div>
+    </div>
+
+    <div class="pullq rv d3">
+      <blockquote>
+        "The stories survivors tell about violence are not simply reports.
+        They are the ongoing construction of a self that can endure —
+        and understanding that construction is the work of psychological science."
+        <cite>Research premise — Autobiographical Memory &amp; Narrative Identity</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ RESEARCH ════ -->
+<section id="research" aria-labelledby="res-h2">
+  <div class="res-wrap">
+    <div class="rv">
+      <hr class="res-rule">
+      <span class="res-eyebrow">Research Programme</span>
+      <h2 class="res-h2" id="res-h2">The Work</h2>
+    </div>
+
+    <div class="test-grid" role="list">
+
+      <article class="test-card rv" role="listitem">
+        <p class="tc-idx">§ I &nbsp; Autobiographical Memory</p>
+        <!-- Testimony comes FIRST — the human reality -->
+        <p class="tc-testimony">
+          "Two communities. One catastrophe. Fifty years later,
+          they remembered themselves differently."
+        </p>
+        <h3 class="tc-title">How Survivors Reconstruct the Self</h3>
+        <p class="tc-method">Narrative Analysis · Partition Survivors · Doctoral Research, IIT Bombay</p>
+        <p class="tc-desc">
+          Memory is not a record. It is a reconstruction shaped by present identity,
+          community values, and what we need the past to mean. His research follows
+          this reconstruction through the testimonies of Punjabi and Sindhi Partition
+          survivors — asking how the same catastrophe produced different selves.
+        </p>
+      </article>
+
+      <article class="test-card rv d1" role="listitem">
+        <p class="tc-idx">§ II &nbsp; Social Identity</p>
+        <p class="tc-testimony">
+          "The community you belong to shapes not just what you remember —
+          it shapes the self you build around what you remember."
+        </p>
+        <h3 class="tc-title">Memory as a Communal Act</h3>
+        <p class="tc-method">Cross-Community Research · Partition 1947 · Mumbai Testimonies</p>
+        <p class="tc-desc">
+          Memory is never purely individual. It is formed within communities —
+          shaped by what a group needs to preserve, transmit, and sometimes forget.
+          His research examines how ethnic and religious identity inflects survivor
+          testimony and how that testimony sustains or fractures group cohesion.
+        </p>
+      </article>
+
+      <article class="test-card rv d2" role="listitem">
+        <p class="tc-idx">§ III &nbsp; Expressive Writing</p>
+        <p class="tc-testimony">
+          "She wrote about the worst year of her life.
+          Three months later, her doctor noticed something had changed."
+        </p>
+        <h3 class="tc-title">Writing as a Clinical Act</h3>
+        <p class="tc-method">Experimental Design · Health Outcomes · Clinical Psychology</p>
+        <p class="tc-desc">
+          What is the clinical value of putting difficult experience into words?
+          His research provides Indian clinical evidence that writing through
+          adversity — not around it — produces statistically significant
+          improvements in both physical and psychological health.
+          Narrative is a mechanism of regulation, not merely expression.
+        </p>
+      </article>
+
+      <article class="test-card rv d3" role="listitem">
+        <p class="tc-idx">§ IV &nbsp; Well-being &amp; Peace Psychology</p>
+        <p class="tc-testimony">
+          "What does peace feel like from the inside,
+          for someone who watched their city burn?"
+        </p>
+        <h3 class="tc-title">What Allows People to Flourish</h3>
+        <p class="tc-method">Mixed Methods · Peace Psychology · 1992–93 Mumbai · Community Research</p>
+        <p class="tc-desc">
+          How do riot survivors narrate 1992–93 decades later — and what does
+          that act of narration reveal about psychological recovery? His 2025 paper
+          places narrative identity at the heart of post-violence healing,
+          arguing that the capacity to tell one's story coherently is itself
+          a peace resource.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ TIMELINE STRIP ════ -->
+<div id="timeline-strip" aria-label="Timeline of key dates and publications">
+  <div class="ts-inner">
+    <div class="ts-node">
+      <span class="ts-yr">1947</span>
+      <span class="ts-ev">Partition of India</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">1992–93</span>
+      <span class="ts-ev">Mumbai Riots</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2011</span>
+      <span class="ts-ev">First Publication</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2020</span>
+      <span class="ts-ev">Memory Studies</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2023</span>
+      <span class="ts-ev">Psychological Studies</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2025</span>
+      <span class="ts-ev">Peace &amp; Conflict</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ PUBLICATIONS ════ -->
+<section id="publications" aria-labelledby="pubs-h2">
+  <div class="pubs-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">The Archive</span>
+      <h2 class="sec-h2" id="pubs-h2">Selected Publications</h2>
+    </div>
+
+    <ol style="list-style:none">
+
+      <li class="pub-entry rv">
+        <div class="pub-ref">REF.<br>01<br>2025</div>
+        <div>
+          <div class="pub-title">Remembering life events during 1992–1993 in Mumbai, India: A narrative identity perspective</div>
+          <div class="pub-journal">Peace and Conflict: Journal of Peace Psychology, 31(1), 73–81</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+          <div class="pub-find">
+            How the riots are narrated decades later reveals the psychological architecture through which identity survives collective violence — and the conditions under which personal peace becomes possible.
+          </div>
+          <a href="https://doi.org/10.1037/pac0000780" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → doi:10.1037/pac0000780</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d1">
+        <div class="pub-ref">REF.<br>02<br>2023</div>
+        <div>
+          <div class="pub-title">Life's ups and downs: Expressive writing and health outcomes</div>
+          <div class="pub-journal">Psychological Studies, 68, 211–222</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+          <div class="pub-find">
+            Writing through personal difficulty — not around it — produces measurable improvements in health: narrative as clinical intervention, not merely catharsis.
+          </div>
+          <a href="https://link.springer.com/article/10.1007/s12646-022-00701-7" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → Psychological Studies · Springer</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d2">
+        <div class="pub-ref">REF.<br>03<br>2020</div>
+        <div>
+          <div class="pub-title">Exploring self through memory: Narratives of Punjabi and Sindhi Partition survivors</div>
+          <div class="pub-journal">Memory Studies, 13(4), 617–632</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+          <div class="pub-find">
+            Partition is not one memory shared by all who lived it — ethnic community shapes the very structure of the self reconstructed from that memory.
+          </div>
+          <a href="https://journals.sagepub.com/doi/abs/10.1177/1750698017750001" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → Memory Studies · Sage</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d3">
+        <div class="pub-ref">REF.<br>04<br>2015</div>
+        <div>
+          <div class="pub-title">Factors affecting psychosocial wellbeing and quality of life among women living with HIV/AIDS</div>
+          <div class="pub-journal">NITTE University Journal of Health Science, 5(4), 66–76</div>
+          <div class="pub-auth">Bhat, S.U., Cherian, A.V., Bhat, A., Chapman, H.J., Lukose, A., <strong>Patwardhan, N.</strong>, Satyanarayana, V. &amp; Ramakrishna, J.</div>
+          <div class="pub-find">
+            Psychosocial wellbeing is shaped as much by stigma, support, and structural access as by clinical variables — vulnerability is always relational before it is individual.
+          </div>
+          <a href="https://nitte.edu.in/journal/December%202015/1r.pdf" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → NITTE University Journal</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d4">
+        <div class="pub-ref">REF.<br>05<br>2011</div>
+        <div>
+          <div class="pub-title">Forgiveness, conflict resolution and marital satisfaction among Indian couples</div>
+          <div class="pub-journal">Bombay Psychologist, XXVI, 1 &amp; 2, 74–80</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Mehta, D.</div>
+          <div class="pub-find">
+            Forgiveness mediates conflict and satisfaction in Indian marriages — the capacity to release resentment is a predictor of lasting partnership quality, not merely a moral virtue.
+          </div>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+</section>
+
+
+<!-- ════ JOURNEY ════ -->
+<section id="journey" aria-labelledby="journey-h2">
+  <div class="journey-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">Curriculum Vitae</span>
+      <h2 class="sec-h2" id="journey-h2">Academic Record</h2>
+    </div>
+
+    <div class="journey-cols rv d1">
+      <div>
+        <div class="j-col-head">Positions Held</div>
+        <div class="j-row"><div class="j-when">Now</div><div><div class="j-place">FLAME University, Pune</div><div class="j-role">Assistant Professor — Psychology</div></div></div>
+        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">Vidyashilp University, Bengaluru</div><div class="j-role">Member Secretary, Board of Studies — BA (Hons.)</div></div></div>
+        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">Karnavati University, Gandhinagar</div><div class="j-role">Assistant Director, Liberal Arts · USLM</div></div></div>
+        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">SRM University AP, Mangalagiri</div><div class="j-role">Faculty Coordinator, Psychology · Member Convenor, BOS</div></div></div>
+        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">NMIMS (Deemed-to-be-University), Mumbai</div><div class="j-role">Faculty</div></div></div>
+      </div>
+      <div>
+        <div class="j-col-head">Academic Formation</div>
+        <div class="edu-item"><div class="edu-deg">PhD in Psychology</div><div class="edu-uni">Indian Institute of Technology Bombay, Mumbai</div><span class="edu-badge">Doctoral Degree</span></div>
+        <div class="edu-item"><div class="edu-deg">M.Sc. in Psychology (Clinical)</div><div class="edu-uni">Christ University, Bangalore</div><span class="edu-badge">Postgraduate</span></div>
+        <div class="edu-item"><div class="edu-deg">B.A. with Psychology Major</div><div class="edu-uni">St. Xavier's College, Mumbai · University of Mumbai</div><span class="edu-badge">Undergraduate</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ FOOTER ════ -->
+<footer role="contentinfo">
+  <div class="foot-wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-name">Ninad Patwardhan</div>
+        <div class="foot-sub">Remembering who we are — one story at a time.</div>
+      </div>
+      <div class="foot-r">
+        <div class="foot-rl">Affiliation</div>
+        <div class="foot-rn">FLAME University, Pune</div>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2025 Prof. Ninad Patwardhan</span>
+      <span>Department of Psychology · FLAME University · Pune, India</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  /* Nav scroll pin */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 40), { passive: true });
+
+  /* Mobile nav */
+  const ham = document.getElementById('nav-ham');
+  const nl  = document.getElementById('nav-links');
+  ham.addEventListener('click', () => {
+    const o = nl.classList.toggle('open');
+    ham.setAttribute('aria-expanded', String(o));
+  });
+  nl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nl.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+  }));
+
+  /* Scroll reveals */
+  const io = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

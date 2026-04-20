@@ -1875,6 +1875,73 @@ footer {
 .art-entry.node-glow::after                { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
 #journey .j-row.node-glow::after           { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
 .award-row.node-glow::before               { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
+
+/* ============================================================
+   MOBILE — comprehensive fixes
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* ── Spine lines: match reduced grid column widths ── */
+  #talks .talk-list::before       { left: 4rem; }
+  #publications .pub-list::before { left: 3.5rem; }
+  #conferences .pub-list::before  { left: 3.5rem; }
+  .awards-container::before       { left: 4rem; }
+
+  /* ── Node dots: match spine positions ── */
+  .talk-entry::before                 { left: calc(4rem - 5px); }
+  #publications .pub-entry::after     { left: calc(3.5rem - 5px); }
+  #conferences  .pub-entry::before    { left: calc(3.5rem - 5px); }
+  .award-row::before                  { left: calc(4rem - 5px); }
+
+  /* ── 1-column sections: spine/dots don't make sense without a date column ── */
+  #supervision .sup-list::before,
+  #articles    .art-list::before  { display: none; }
+  .sup-entry::after,
+  .art-entry::after               { display: none; }
+
+  /* ── j-row: too wide on phones ── */
+  .j-row { grid-template-columns: 5rem 1fr; gap: 1rem; }
+
+  /* ── Timeline strip: allow horizontal scroll instead of overflow ── */
+  #timeline-strip { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 3rem 0; }
+  .ts-inner       { min-width: 560px; padding: 0 1.5rem; }
+
+  /* ── Reduce excessive section top-padding on phones ── */
+  section { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+
+  /* ── Research: readable on small screens ── */
+  .res-wrap { padding: 0; }
+
+  /* ── Hero: prevent name overflow on tiny phones ── */
+  .hero-name { font-size: clamp(2.8rem, 9vw, 5rem); gap: 0.3rem; }
+  .hero-fields { flex-wrap: wrap; gap: .4rem; }
+  .hero-field  { font-size: .58rem; }
+}
+
+/* ── Very small phones (< 480px) ── */
+@media (max-width: 480px) {
+  .hero-name   { font-size: clamp(2.4rem, 9.5vw, 4rem); }
+  .date-yr     { font-size: 3.5rem; }
+  .section-h2, .sec-h2 { font-size: clamp(1.6rem, 8vw, 2.4rem); }
+  .pub-entry   { grid-template-columns: 3rem 1fr; gap: 1rem; }
+  .talk-entry, .award-row { grid-template-columns: 3.5rem 1fr; gap: 1rem; }
+  .j-row       { grid-template-columns: 4.5rem 1fr; gap: 0.75rem; }
+
+  /* Re-align spine/dots for 3rem/3.5rem columns */
+  #talks .talk-list::before,
+  .awards-container::before           { left: 3.5rem; }
+  .talk-entry::before,
+  .award-row::before                  { left: calc(3.5rem - 5px); }
+  #publications .pub-list::before,
+  #conferences  .pub-list::before     { left: 3rem; }
+  #publications .pub-entry::after,
+  #conferences  .pub-entry::before    { left: calc(3rem - 5px); }
+
+  #timeline-strip { padding: 2rem 0; }
+  .ts-inner       { min-width: 480px; }
+  footer          { padding: 3rem 1.25rem; }
+}
+
   </style>
 </head>
 <body>

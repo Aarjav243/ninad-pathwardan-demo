@@ -63,41 +63,88 @@ hr { border: none; }
    ============================================================ */
 #nav {
   position: fixed; inset: 0 0 auto 0; z-index: 300;
-  height: 48px;
+  height: 64px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 max(2rem, 4vw);
-  transition: background .4s, border-color .4s;
+  transition: all 0.5s var(--ease);
   border-bottom: 1px solid transparent;
+  background: rgba(250, 247, 240, 0);
 }
 #nav.on {
-  background: rgba(234,224,200,0.95);
-  backdrop-filter: blur(10px);
-  border-color: var(--rule);
+  background: rgba(234,224,200,0.92);
+  backdrop-filter: blur(12px);
+  border-color: var(--rule-s);
+  height: 56px;
 }
 .nav-id {
   font-family: var(--fm);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-.nav-id strong { color: var(--body); }
-.nav-links {
-  list-style: none; display: flex; gap: 2rem;
-}
-.nav-links a {
-  font-family: var(--fm);
-  font-size: 0.58rem;
+  font-size: 0.9rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
-  transition: color .2s;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: navFadeDown 0.8s var(--ease) forwards;
 }
-.nav-links a:hover { color: var(--terra); }
+.nav-id strong { color: var(--dark); font-weight: 700; }
+
+.nav-links {
+  list-style: none; display: flex; gap: 2rem;
+}
+.nav-links li {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: navFadeDown 0.8s var(--ease) forwards;
+}
+.nav-links li:nth-child(1) { animation-delay: 0.1s; }
+.nav-links li:nth-child(2) { animation-delay: 0.15s; }
+.nav-links li:nth-child(3) { animation-delay: 0.2s; }
+.nav-links li:nth-child(4) { animation-delay: 0.25s; }
+.nav-links li:nth-child(5) { animation-delay: 0.3s; }
+.nav-links li:nth-child(6) { animation-delay: 0.35s; }
+.nav-links li:nth-child(7) { animation-delay: 0.4s; }
+.nav-links li:nth-child(8) { animation-delay: 0.45s; }
+.nav-links li:nth-child(9) { animation-delay: 0.5s; }
+.nav-links li:nth-child(10) { animation-delay: 0.55s; }
+.nav-links li:nth-child(11) { animation-delay: 0.6s; }
+
+@keyframes navFadeDown {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-links a {
+  font-family: var(--fm);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--dark); }
+
+/* Liquid Underline for Nav */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1.5px;
+  background: var(--terra);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.nav-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 .nav-ham {
   display: none; background: none; border: none;
   cursor: pointer; flex-direction: column; gap: 5px; padding: 4px;
 }
-.nav-ham span { display: block; width: 20px; height: 1px; background: var(--muted); transition: .3s; }
+.nav-ham span { display: block; width: 22px; height: 1.5px; background: var(--dark); transition: .3s; }
 
 
 /* ============================================================
@@ -139,8 +186,6 @@ hr { border: none; }
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 2rem;
-  opacity: 0;
-  animation: fadeup .7s var(--ease) .1s forwards;
 }
 .date-block { text-align: left; }
 .date-block:last-child { text-align: right; }
@@ -162,94 +207,313 @@ hr { border: none; }
   margin-top: 0.3rem;
 }
 
-/* Thick rule separating dates from name */
-.hero-divider {
-  border-top: 2px solid var(--rule-s);
-  margin-bottom: 2rem;
-  opacity: 0;
-  animation: fadeup .5s var(--ease) .22s forwards;
+/* ────────────────────────────────────────────────────────────
+   HERO — Dossier / Archival Redesign
+──────────────────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--sand);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    url("https://www.transparenttextures.com/patterns/linen-paper.png");
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* The name */
+/* The Ghost "MEMORY" - Letter by letter */
+.hero-ghost {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-ghost span {
+  font-family: var(--fd);
+  font-size: 25vw;
+  font-weight: 900;
+  color: rgba(58, 44, 26, 0.035);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.hero-ghost span span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) scale(1.1);
+  filter: blur(12px);
+  transition: all 1.2s var(--ease);
+}
+#hero.hero-in .hero-ghost span span {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+.hero-body {
+  width: 100%;
+  max-width: 1100px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+/* Mechanical Stamp Dates */
+.hero-dates {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+.date-block {
+  display: flex;
+  flex-direction: column;
+}
+.date-yr {
+  font-family: var(--fd);
+  font-size: 6rem;
+  line-height: 0.9;
+  font-weight: 700;
+  color: var(--terra);
+  letter-spacing: -0.02em;
+}
+.date-label {
+  font-family: var(--fm);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--body);
+  margin-top: 0.6rem;
+  opacity: 0.7;
+}
+
+/* The Name - High Contrast */
 .hero-name {
   font-family: var(--fd);
-  font-size: clamp(3rem, 8vw, 7.5rem);
-  font-weight: 400;
-  line-height: 0.92;
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  margin: 1.5rem 0;
+  line-height: 0.9;
   color: var(--dark);
-  letter-spacing: -0.015em;
-  opacity: 0;
-  animation: fadeup .9s var(--ease) .32s forwards;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
 }
-.hero-name .prof {
+.prof {
   font-family: var(--fm);
-  font-size: clamp(0.58rem, 1.1vw, 0.78rem);
-  font-weight: 400;
-  letter-spacing: 0.22em;
+  font-size: 0.8rem;
   text-transform: uppercase;
+  letter-spacing: 0.45em;
   color: var(--terra);
-  display: block;
-  margin-bottom: 0.6rem;
-}
-.hero-name em {
-  font-style: italic;
-  display: block;
-}
-
-/* Thin rule below name */
-.hero-divider2 {
-  border-top: 1px solid var(--rule-s);
-  margin: 2rem 0 1.75rem;
+  margin-right: 1.2rem;
   opacity: 0;
-  animation: fadeup .5s var(--ease) .54s forwards;
+  transform: translateY(10px);
+}
+#hero.hero-in .prof { opacity: 1; transform: none; transition: all 0.6s 1.2s; }
+
+.h-drop-1 { font-family: var(--fd); font-weight: 700; opacity:0; transform: translateY(-100px); }
+.h-drop-2 { font-family: "Playfair Display", serif; font-style: italic; font-weight: 400; opacity:0; transform: translateY(-100px); }
+#hero.hero-in .h-drop-1 { animation: hDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.4s; }
+#hero.hero-in .h-drop-2 { animation: hDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.55s; }
+
+@keyframes hDrop {
+  0% { opacity: 0; transform: translateY(-100px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Institution line */
+/* Dividers - Ink bleed style */
+.hero-divider, .hero-divider2 {
+  height: 2px;
+  background: var(--rule-s);
+  border: none;
+  width: 100%;
+  margin: 0;
+  transform: scaleX(0);
+  transform-origin: center;
+}
+#hero.hero-in .hero-divider { animation: hLineReveal 1s var(--ease) forwards; animation-delay: 0.8s; }
+#hero.hero-in .hero-divider2 { animation: hLineReveal 1s var(--ease) forwards; animation-delay: 0.9s; }
+
+@keyframes hLineReveal {
+  to { transform: scaleX(1); opacity: 1; }
+}
+
 .hero-inst {
   font-family: var(--fm);
-  font-size: clamp(0.58rem, 1vw, 0.72rem);
-  letter-spacing: 0.16em;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 2rem;
+  color: var(--body);
+  margin: 1.5rem 0;
   opacity: 0;
-  animation: fadeup .6s var(--ease) .64s forwards;
+  transform: translateY(10px);
 }
+#hero.hero-in .hero-inst { opacity: 0.8; transform: none; transition: all 0.6s 1.4s; }
 
-/* The driving question */
 .hero-question {
-  font-family: var(--fd);
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1.55;
+  font-family: var(--fb);
+  font-size: 1.35rem;
+  line-height: 1.6;
+  max-width: 820px;
+  margin: 2.2rem auto;
   color: var(--dark);
-  max-width: 680px;
-  margin: 0 auto 2.5rem;
+  font-style: italic;
   opacity: 0;
-  animation: fadeup .75s var(--ease) .76s forwards;
+  transform: translateY(15px);
 }
+#hero.hero-in .hero-question { opacity: 1; transform: none; transition: all 0.7s 1.6s; }
 
-/* Research field tags */
 .hero-fields {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 0.5rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3.5rem;
   opacity: 0;
-  animation: fadeup .7s var(--ease) .9s forwards;
 }
+#hero.hero-in .hero-fields { opacity: 1; transition: all 0.7s 1.8s; }
+
 .hfield {
   font-family: var(--fm);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
+  font-size: 0.54rem;
   text-transform: uppercase;
+  letter-spacing: 0.2em;
   color: var(--muted);
 }
 .hfield::before { content: '— '; color: var(--terra); }
+
+@media(max-width:768px){
+  .hero-dates { flex-direction: column; align-items: center; gap: 2.5rem; }
+  .date-yr { font-size: 4.5rem; }
+  .hero-name { flex-direction: column; align-items: center; text-align: center; }
+}
 
 @keyframes fadeup {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 1A — Word Drop: per-letter spring fall
+══════════════════════════════════════════════════════════ */
+@keyframes letterDrop {
+  0%   { opacity: 0; transform: translateY(-90px) scale(1.15); }
+  65%  { opacity: 1; transform: translateY(6px) scale(0.98); }
+  82%  { transform: translateY(-3px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.h-letter {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform;
+}
+#hero.hero-in .h-letter {
+  animation: letterDrop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 1B — Ghost Word Parallax (driven by JS scroll)
+══════════════════════════════════════════════════════════ */
+.hero-ghost {
+  will-change: transform;
+  /* JS sets transform: translateY() on scroll */
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 1C — Date Slide-In from sides
+══════════════════════════════════════════════════════════ */
+.date-block:first-child .date-yr {
+  opacity: 0;
+  transform: translateX(-120px);
+  transition: opacity 0.8s var(--ease) 0.1s, transform 0.8s var(--ease) 0.1s;
+}
+.date-block:last-child .date-yr {
+  opacity: 0;
+  transform: translateX(120px);
+  transition: opacity 0.8s var(--ease) 0.1s, transform 0.8s var(--ease) 0.1s;
+}
+#hero.hero-in .date-block:first-child .date-yr,
+#hero.hero-in .date-block:last-child .date-yr {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 2A — Question: Line by Line Drop
+══════════════════════════════════════════════════════════ */
+.q-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(-28px);
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+}
+#question.q-lit .q-line:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.1s; }
+#question.q-lit .q-line:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.35s; }
+#question.q-lit .q-line:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.6s; }
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 2B — Question: Background Depth Shift (JS-driven)
+══════════════════════════════════════════════════════════ */
+#question { position: relative; overflow: hidden; }
+#question::before {
+  content: '';
+  position: absolute;
+  inset: -30% 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(30,22,16,0.55), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+  transform: translateY(0px);
+  transition: transform 0.05s linear;
+}
+#question .q-inner { position: relative; z-index: 1; }
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 3A — About: Stat Number Stamp
+══════════════════════════════════════════════════════════ */
+.byline .bl {
+  opacity: 0;
+  transform: translateY(-45px) scale(1.08);
+  transition: opacity 0.6s var(--ease), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.byline.rv.in .bl:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.05s; }
+.byline.rv.in .bl:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.15s; }
+.byline.rv.in .bl:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.25s; }
+.byline.rv.in .bl:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.35s; }
+.byline.rv.in .bl:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.45s; }
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATION 3B — About: Paragraph Reveal Lines
+══════════════════════════════════════════════════════════ */
+.prose p {
+  position: relative;
+  overflow: hidden;
+}
+.prose p::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sand);
+  transform-origin: right center;
+  transform: scaleX(1);
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.prose.rv.in p:nth-child(1)::after { transform: scaleX(0); transition-delay: 0.1s; }
+.prose.rv.in p:nth-child(2)::after { transform: scaleX(0); transition-delay: 0.35s; }
+.prose.rv.in p:nth-child(3)::after { transform: scaleX(0); transition-delay: 0.55s; }
+/* Second column: slightly later overall */
+.two-col > div:last-child .prose.rv.in p:nth-child(1)::after { transition-delay: 0.3s; }
+.two-col > div:last-child .prose.rv.in p:nth-child(2)::after { transition-delay: 0.55s; }
+.two-col > div:last-child .prose.rv.in p:nth-child(3)::after { transition-delay: 0.75s; }
 
 
 /* ============================================================
@@ -495,44 +759,67 @@ hr { border: none; }
    ============================================================ */
 #timeline-strip {
   background: var(--terra);
-  padding: 2rem max(2rem, 4vw);
-  overflow-x: auto;
+  padding: 4rem max(2rem, 4vw);
+  overflow: hidden;
+  position: relative;
 }
 .ts-inner {
   max-width: 1100px; margin: 0 auto;
   display: flex; align-items: center;
   gap: 0; min-width: 600px;
+  position: relative; z-index: 5;
 }
 .ts-node {
   flex: 1;
   position: relative;
   text-align: center;
+  opacity: 0;
+  transform: translateY(20px) scale(1.05);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.ts-node.in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 .ts-node::after {
   content: '';
   position: absolute;
   right: 0; top: 50%; transform: translateY(-50%);
-  width: 1px; height: 28px;
-  background: rgba(234,224,200,.3);
+  width: 1px; height: 32px;
+  background: rgba(234,224,200,.2);
 }
 .ts-node:last-child::after { display: none; }
 .ts-yr {
   font-family: var(--fd);
-  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  font-size: clamp(1.2rem, 3vw, 2rem);
   font-weight: 700;
   color: #F5ECD6;
   line-height: 1;
   display: block;
+  transition: transform 0.4s var(--ease);
 }
+.ts-node:hover .ts-yr { transform: scale(1.1); color: #fff; }
 .ts-ev {
   font-family: var(--fm);
-  font-size: 0.5rem;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(245,236,214,.55);
+  color: rgba(245,236,214,.7);
   display: block;
-  margin-top: 0.3rem;
+  margin-top: 0.6rem;
+  max-width: 140px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
 }
+
+/* Archive Stamp Animation */
+@keyframes tsStamp {
+  0% { opacity: 0; transform: translateY(-40px) scale(1.2) rotate(-2deg); filter: blur(10px); }
+  70% { transform: translateY(5px) scale(0.98) rotate(0deg); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.ts-node.in { animation: tsStamp 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
 
 
 /* ============================================================
@@ -540,6 +827,7 @@ hr { border: none; }
    ============================================================ */
 #publications { background: var(--ash); padding: 8rem max(2rem, 4vw); }
 .pubs-wrap { max-width: 1100px; margin: 0 auto; }
+.pubs-wrap .rv { padding-left: 7.5rem; }
 .pubs-wrap .sec-eyebrow { color: var(--terra); }
 .pubs-wrap .sec-h2 { color: var(--dark); }
 
@@ -588,7 +876,7 @@ hr { border: none; }
 /* What it actually found — in human terms */
 .pub-find {
   background: rgba(140,37,0,.06);
-  border-left: 2px solid var(--terra);
+  border-left: none;
   padding: .65rem 1rem;
   margin-bottom: .85rem;
   font-family: var(--fb);
@@ -596,6 +884,24 @@ hr { border: none; }
   font-style: italic;
   color: var(--body);
   line-height: 1.6;
+}
+.pub-yr-big {
+  font-family: var(--fd);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--terra);
+  display: block;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-top: 0.2rem;
+}
+#conferences .pub-ref {
+  font-family: var(--fd);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  padding-top: 0.1rem;
 }
 .pub-doi {
   font-family: var(--fm);
@@ -631,7 +937,7 @@ hr { border: none; }
   margin-bottom: 0;
 }
 .j-row {
-  display: grid; grid-template-columns: 72px 1fr; gap: .9rem;
+  display: grid; grid-template-columns: 7.5rem 1fr; gap: 3.5rem;
   padding: 1.1rem 0; border-bottom: 1px solid var(--rule);
 }
 .j-when {
@@ -769,9 +1075,806 @@ footer {
   .foot-r { text-align: left; }
   .foot-base { flex-direction: column; gap: .4rem; }
 }
+@media (max-width: 768px) {
+  #conferences,#awards,#talks,#teaching,#supervision,#articles,#service { padding: 5.5rem 1.5rem; }
+  .course-cards { grid-template-columns: 1fr; }
+  .talk-entry,.award-row { grid-template-columns: 4rem 1fr; gap: 1.25rem; }
+  .sup-entry,.art-entry { grid-template-columns: 1fr; gap: .5rem; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
 }
+
+/* ────────────────────────────────────────────────────────────
+   SHARED SECTION HEADINGS (new sections)
+──────────────────────────────────────────────────────────── */
+.section-eyebrow { font-family:var(--fm); font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; color:var(--terra); display:block; margin-bottom:.5rem; }
+.section-rule    { border-top:2px solid var(--rule-s); margin-bottom:.6rem; }
+.section-h2      { font-family:var(--fd); font-size:clamp(2rem,4.5vw,3.4rem); font-weight:400; color:var(--dark); line-height:1.1; margin-bottom:3rem; }
+.section-h2 em   { font-style:italic; color:var(--terra); }
+#awards .section-h2,
+#service .section-h2  { color:var(--dkl); }
+#awards .section-rule,
+#service .section-rule { border-color:rgba(234,224,200,.35); }
+
+/* ────────────────────────────────────────────────────────────
+   TIMELINE THREAD
+──────────────────────────────────────────────────────────── */
+#timeline-strip { position:relative; height: 120px; display: flex; align-items: center; }
+.ts-thread        { position:absolute; top:50%; left:0; width:100%; height:1px; background:rgba(234,224,200,.15); z-index:1; pointer-events:none; }
+.ts-svg           { position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none; }
+.ts-wire          { stroke: #F5ECD6; stroke-width: 1.5; fill: none; stroke-dasharray: 2000; stroke-dashoffset: 2000; }
+.ts-wire.in       { animation: drawWire 1.5s cubic-bezier(0.45, 0, 0.55, 1.2) forwards; }
+
+@keyframes drawWire {
+  to { stroke-dashoffset: 0; }
+}
+
+.ts-node { opacity:0; position:relative; z-index:3; transform-origin: center bottom; }
+.ts-node.in { animation: nodeWobble 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+
+@keyframes nodeWobble {
+  0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+  40% { transform: translateY(-8px) scale(1.05); opacity: 1; }
+  60% { transform: translateY(4px) scale(0.98); }
+  80% { transform: translateY(-2px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Physics animations keyframes */
+@keyframes stampDrop {
+  0% { transform: translateY(-40px) rotate(-2deg); opacity: 0; }
+  60% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80% { transform: translateY(-8px) rotate(0.5deg); }
+  100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+
+@keyframes medalDrop {
+  0% { transform: translateY(-30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pinnedDrop {
+  0% { transform: translateY(-20px) rotate(-1.5deg); opacity: 0; }
+  50% { transform: translateY(0) rotate(0.8deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+
+@keyframes sedimentSlide {
+  0% { transform: translateX(-50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes reelClick {
+  0% { transform: translateX(20px); opacity: 0; }
+  80% { transform: translateX(-3px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes counterTick {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  40% { opacity: 0.3; }
+  60% { opacity: 1; }
+  80% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@keyframes typeSpring {
+  0% { transform: scaleX(0); opacity: 0; }
+  70% { transform: scaleX(1.1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+.physics-stamp { opacity: 0; }
+.physics-stamp.in { animation: stampDrop 0.6s var(--ease) forwards; }
+
+.physics-medal { opacity: 0; }
+.physics-medal.in { animation: medalDrop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+.physics-pinned { opacity: 0; transform-origin: top center; }
+.physics-pinned.in { animation: pinnedDrop 0.8s var(--ease) forwards; }
+
+.physics-sediment { opacity: 0; }
+.physics-sediment.in { animation: sedimentSlide 1s var(--ease) forwards; }
+
+.physics-reel { opacity: 0; }
+.physics-reel.in { animation: reelClick 0.6s var(--ease) forwards; }
+
+.physics-tick { opacity: 0; }
+.physics-tick.in { animation: counterTick 0.4s linear forwards; }
+
+.physics-spring { opacity: 0; transform-origin: left; }
+.physics-spring.in { animation: typeSpring 0.5s var(--ease) forwards; }
+
+
+/* ────────────────────────────────────────────────────────────
+   CONFERENCES
+──────────────────────────────────────────────────────────── */
+#conferences { background:var(--sand); padding:8rem max(2rem,4vw); }
+.confs-wrap  { max-width:1100px; margin:0 auto; }
+
+/* ────────────────────────────────────────────────────────────
+   AWARDS
+──────────────────────────────────────────────────────────── */
+#awards      { background:var(--dk); padding:8rem max(2rem,4vw); }
+.awards-wrap { max-width:1100px; margin:0 auto; }
+.award-row   { display:grid; grid-template-columns:5.5rem 1fr; gap:2rem; padding:1.75rem 0; border-top:1px solid rgba(234,224,200,.12); align-items:start; }
+.award-row:last-child { border-bottom:1px solid rgba(234,224,200,.12); }
+.award-yr    { font-family:var(--fm); font-size:.88rem; font-weight:700; color:var(--terra); letter-spacing:.04em; line-height:1.5; padding-top:.1rem; }
+.award-name  { font-family:var(--fd); font-size:1.05rem; font-weight:500; color:var(--dkl); line-height:1.35; margin-bottom:.3rem; }
+.award-detail{ font-family:var(--fb); font-size:.87rem; color:var(--dkm); line-height:1.6; }
+
+/* ────────────────────────────────────────────────────────────
+   TALKS
+──────────────────────────────────────────────────────────── */
+#talks       { background:var(--ash); padding:8rem max(2rem,4vw); }
+.talks-wrap  { max-width:1100px; margin:0 auto; }
+.talk-entry  { display:grid; grid-template-columns:5.5rem 1fr; gap:2rem; padding:1.5rem 0; border-top:1px solid var(--rule); align-items:start; }
+.talk-entry:last-child { border-bottom:1px solid var(--rule); }
+.talk-yr     { font-family:var(--fm); font-size:.88rem; font-weight:700; color:var(--terra); letter-spacing:.04em; padding-top:.1rem; line-height:1.5; }
+
+/* Supervision & Articles Layout Fix */
+#supervision .sup-wrap, #articles .art-wrap { max-width:1100px; margin:0 auto; }
+.sup-entry, .art-entry {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 3.5rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.sup-entry:last-child, .art-entry:last-child { border-bottom: 1px solid var(--rule); }
+.sup-yr, .art-yr { font-family:var(--fm); font-size:.88rem; font-weight:700; color:var(--terra); letter-spacing:.04em; padding-top:.1rem; line-height:1.4; }
+.sup-inst, .art-title { font-family:var(--fd); font-size:1.05rem; font-weight:500; color:var(--dark); line-height:1.35; margin-bottom:.3rem; }
+.sup-proj, .art-outlet { font-family:var(--fb); font-size:.88rem; color:var(--muted); line-height:1.6; }
+.art-auth { font-family:var(--fm); font-size:.58rem; color:var(--muted); margin-top:.5rem; letter-spacing:.03em; }
+.art-auth strong { color:var(--body); }
+.art-link { display:inline-block; font-family:var(--fm); font-size:.52rem; letter-spacing:.12em; text-transform:uppercase; color:var(--terra); border-bottom:1px solid currentColor; padding-bottom:1px; margin-top:.8rem; opacity:.7; transition:opacity .2s; }
+.art-link:hover { opacity:1; }
+
+/* ────────────────────────────────────────────────────────────
+   TEACHING
+──────────────────────────────────────────────────────────── */
+#teaching       { background:var(--sand); padding:8rem max(2rem,4vw); position:relative; z-index:1; }
+.teaching-wrap  { max-width:1100px; margin:0 auto; }
+.course-group-head { font-family:var(--fm); font-size:.58rem; letter-spacing:.26em; text-transform:uppercase; color:var(--terra); border-bottom:2px solid var(--rule-s); padding-bottom:.5rem; margin-bottom:0; margin-top:4rem; }
+.course-group-head:first-child { margin-top:0; }
+#teaching       { background:var(--sand); padding:8rem max(2rem,4vw); position:relative; z-index:1; }
+.teaching-wrap  { max-width:1100px; margin:0 auto; }
+.course-group-head { font-family:var(--fm); font-size:.58rem; letter-spacing:.26em; text-transform:uppercase; color:var(--terra); border-bottom:2px solid var(--rule-s); padding-bottom:.5rem; margin-bottom:0; margin-top:4rem; }
+.course-group-head:first-child { margin-top:0; }
+
+.course-cards   {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem;
+  padding: 3rem 0;
+}
+
+.course-card {
+  background: var(--ash);
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(140, 37, 0, 0.03) 27px,
+    rgba(140, 37, 0, 0.04) 28px
+  );
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(58,44,26,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  overflow: hidden;
+}
+
+.course-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--terra);
+  opacity: 0.85;
+  transition: transform 0.5s var(--ease);
+}
+.course-card:hover .course-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.course-name {
+  font-family: var(--fd);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--dark);
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.course-dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(140, 37, 0, 0.2);
+  border-radius: 50%;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+.course-card:hover .course-dot {
+  background: var(--terra);
+  box-shadow: 0 0 12px var(--terra);
+}
+
+/* Smooth Liquid Edge Filling Animation */
+@keyframes liquidFill {
+  0%   { clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%); }
+  25%  { clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%); }
+  50%  { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%); }
+  75%  { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 100%); }
+  100% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%); }
+}
+
+.course-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 3px solid var(--terra);
+  border-radius: 16px;
+  clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%);
+  transition: clip-path 0s;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.course-card:hover::before {
+  animation: liquidFill 1s linear forwards;
+}
+
+.course-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(58,44,26,0.1);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(58,44,26,0.12);
+}
+
+/* Punched hole removed in favor of center dot per image */
+/* .course-card::after was hole, now used for border final state */
+
+/* ────────────────────────────────────────────────────────────
+   ABOUT — The Story Redesign
+──────────────────────────────────────────────────────────── */
+#about { background:var(--sand); padding:10rem max(2rem,4vw); position:relative; overflow:hidden; }
+.about-wrap { max-width:1100px; margin:0 auto; position:relative; z-index:2; }
+
+/* About Dates - Top Prominent Style */
+.about-dates-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule-s);
+}
+.about-date-item {
+  display: flex;
+  flex-direction: column;
+}
+.about-date-yr {
+  font-family: var(--fd);
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--terra);
+  line-height: 1;
+}
+.about-date-label {
+  font-family: var(--fm);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--body);
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+@media(max-width:768px){
+  .about-dates-top { flex-direction: column; align-items: center; gap: 2rem; }
+  .about-date-yr { font-size: 3.5rem; }
+}
+
+/* Tactile Ledger Cards (Byline) */
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 4rem 0 6rem;
+}
+.bl {
+  background: var(--ash);
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-width: 200px;
+  flex: 1;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  position: relative;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  overflow: visible; /* Required for edge fill */
+}
+.bl:nth-child(even) { transform: rotate(0.5deg) translateY(5px); }
+.bl:nth-child(odd) { transform: rotate(-0.5deg); }
+.bl:hover { transform: translateY(-5px) rotate(0deg); box-shadow: 0 12px 24px rgba(0,0,0,0.08); z-index: 5; }
+
+/* Edge Filling Animation for Ledger Cards */
+.bl::before, .bl::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.bl::before {
+  border: 2.5px solid var(--terra);
+  clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%);
+  transition: clip-path 0s;
+  z-index: 2;
+}
+.bl:hover::before {
+  animation: liquidFill 1.2s linear forwards;
+}
+.bl::after {
+  border: 1px solid rgba(58,44,26,0.1);
+  z-index: 1;
+}
+
+.bl-k { font-family:var(--fm); font-size:.56rem; letter-spacing:.18em; text-transform:uppercase; color:var(--terra); margin-bottom:.75rem; border-bottom:1px solid rgba(140,37,0,0.15); padding-bottom:.25rem; }
+.bl-v { font-family:var(--fd); font-size:1.05rem; color:var(--dark); line-height:1.35; font-weight:500; }
+
+/* Prose & Typography */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+.prose p {
+  font-family: var(--fb);
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: var(--body);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Ink Bleed Reveal */
+.prose.in p {
+  animation: inkBleed 1.2s var(--ease) forwards;
+}
+.prose.in p:nth-child(2) { animation-delay: 0.3s; }
+.prose.in p:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes inkBleed {
+  0%   { opacity:0; transform:translateY(15px) scale(0.99); filter:blur(4px); }
+  100% { opacity:1; transform:none; filter:blur(0); }
+}
+
+.drop-cap {
+  float: left;
+  font-family: var(--fd);
+  font-size: 4.5rem;
+  line-height: 0.8;
+  padding-right: 0.75rem;
+  padding-top: 0.4rem;
+  color: var(--terra);
+}
+
+@media(max-width:850px){
+  .two-col { grid-template-columns: 1fr; gap: 3rem; }
+  .bl { min-width: 100%; }
+}
+
+/* ────────────────────────────────────────────────────────────
+   SERVICE & MISCELLANEOUS
+──────────────────────────────────────────────────────────── */
+
+/* ────────────────────────────────────────────────────────────
+   SERVICE & MISCELLANEOUS
+──────────────────────────────────────────────────────────── */
+#service      { background:var(--dk); padding:8rem max(2rem,4vw); }
+.service-wrap { max-width:1100px; margin:0 auto; }
+.svc-grid     { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem 5rem; margin-top:1rem; }
+.svc-item     { border-top:1px solid rgba(234,224,200,.12); padding-top:1.25rem; }
+.svc-label    { font-family:var(--fm); font-size:.54rem; letter-spacing:.2em; text-transform:uppercase; color:var(--terra); margin-bottom:.5rem; }
+.svc-text     { font-family:var(--fb); font-size:.93rem; color:var(--dkl); line-height:1.65; }
+.svc-sub      { font-family:var(--fm); font-size:.56rem; color:var(--dkm); letter-spacing:.06em; margin-top:.3rem; }
+@media(max-width:768px){ .svc-grid { grid-template-columns:1fr; } }
+
+/* ────────────────────────────────────────────────────────────
+   MOTION KEYFRAMES
+──────────────────────────────────────────────────────────── */
+@keyframes curtain-open { from{clip-path:inset(0 50% 0 50%);opacity:0} to{clip-path:inset(0 0% 0 0%);opacity:1} }
+@keyframes dust-reveal  { 0%{transform:translateX(-28px);opacity:0} 100%{transform:translateX(0);opacity:1;} }
+#publications .pub-entry.rv,#conferences .pub-entry.rv { transform:none; }
+#publications .pub-entry.in,#conferences .pub-entry.in { animation:dust-reveal 1.2s var(--ease) forwards; }
+#talks .talk-entry.rv { transform:none; }
+#talks .talk-entry.in { animation:curtain-open 1.0s var(--ease) forwards; }
+
+/* ═══════════════════════════════════════════════════════
+   HERO — draw rules + letter drop
+═══════════════════════════════════════════════════════ */
+@keyframes drawRule {
+  from { transform:scaleX(0); opacity:1; }
+  to   { transform:scaleX(1); opacity:1; }
+}
+@keyframes letterDrop {
+  0%  { opacity:0; transform:translateY(-40px) rotate(-1.5deg); }
+  60% { transform:translateY(5px) rotate(0deg); }
+  80% { transform:translateY(-2px); }
+  100%{ opacity:1; transform:none; }
+}
+/* Override existing fadeup on dividers */
+.hero-divider  { opacity:1; transform:scaleX(0); transform-origin:left; animation:drawRule .7s var(--ease) .22s both; }
+.hero-divider2 { opacity:1; transform:scaleX(0); transform-origin:left; animation:drawRule .6s var(--ease) .54s both; }
+.letter-span   { display:inline-block; animation:letterDrop .45s var(--ease) both; }
+
+/* ═══════════════════════════════════════════════════════
+   QUESTION BAND — alternating slides + fade from black
+═══════════════════════════════════════════════════════ */
+#question { background:#000; transition:background 1.4s ease; }
+#question.q-lit { background:var(--dark); }
+.q-line { display:block; opacity:0; transform:translateX(-80px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.q-line:nth-child(even) { transform:translateX(80px); }
+.q-text.rv  { transform:none; } /* children handle reveal */
+.q-text.in .q-line             { opacity:1; transform:none; }
+.q-text.in .q-line:nth-child(2){ transition-delay:.14s; }
+.q-text.in .q-line:nth-child(3){ transition-delay:.28s; }
+
+/* ═══════════════════════════════════════════════════════
+   ABOUT — center rule draw + columns from sides
+═══════════════════════════════════════════════════════ */
+#about .rv .sec-rule    { transform:scaleX(0); transform-origin:center; transition:transform .7s var(--ease) .1s; }
+#about .rv.in .sec-rule { transform:scaleX(1); }
+.col-from-left.rv  { opacity:0; transform:translateX(-60px); }
+.col-from-right.rv { opacity:0; transform:translateX(60px); }
+.col-from-left.rv.in,
+.col-from-right.rv.in { opacity:1; transform:none; }
+
+/* ═══════════════════════════════════════════════════════
+   RESEARCH CARDS — lift off + edge filling border
+   Used for #research section ("The Work")
+═══════════════════════════════════════════════════════ */
+.test-card { position:relative; overflow:hidden; border-radius:12px; }
+.test-card.rv { transition:opacity .6s var(--ease), transform .6s var(--ease), box-shadow .6s var(--ease); }
+.test-grid .test-card.rv.in { opacity:1; transform:translateY(-5px); box-shadow:0 8px 28px rgba(0,0,0,.32); }
+
+/* The Filling Edge */
+.test-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--terra);
+  border-radius: 12px;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0s;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.test-card:hover::before {
+  animation: borderFill 0.8s var(--ease) forwards;
+}
+
+/* Final persistent border after animation */
+.test-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--terra);
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.test-card:hover::after { opacity: 1; transition-delay: 0.7s; }
+
+.test-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+}
+
+/* ══════════════════════════════════════════════════════════
+   PUBLICATIONS — Pulsing Dot + Magnetic DOI
+══════════════════════════════════════════════════════════ */
+@keyframes pubRefPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(140,37,0,.45); }
+  50%       { box-shadow: 0 0 0 12px rgba(140,37,0,0); }
+}
+#publications .pub-entry.in .pub-ref {
+  animation: pubRefPulse 2.4s ease-in-out .3s infinite;
+}
+@keyframes magDoi {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: .75; transform: translateX(0); }
+}
+#publications .pub-doi {
+  opacity: 0;
+  transform: translateX(32px);
+}
+#publications .pub-entry.in .pub-doi {
+  animation: magDoi .65s cubic-bezier(0.34,1.56,0.64,1) .5s forwards;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONFERENCES — Passport Border + Location Pulse
+══════════════════════════════════════════════════════════ */
+#conferences .pub-entry { position: relative; }
+#conferences .pub-entry::after {
+  content: '';
+  position: absolute;
+  inset: -1px 0;
+  border: 1.5px solid rgba(140,37,0,.55);
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path .75s var(--ease) .2s;
+}
+#conferences .pub-entry.in::after { clip-path: inset(0 0% 0 0); }
+#conferences .pub-journal::before { content: '📍 '; font-style: normal; }
+#conferences .pub-journal { opacity: 0; transform: translateY(-10px); }
+@keyframes locDrop {
+  from { transform: translateY(-10px); opacity: 0; }
+  60%  { transform: translateY(3px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+#conferences .pub-entry.in .pub-journal {
+  animation: locDrop .55s var(--ease) .4s forwards;
+}
+
+/* ══════════════════════════════════════════════════════════
+   AWARDS — Medal Thread (spine + dots)
+══════════════════════════════════════════════════════════ */
+.awards-container { position: relative; }
+@keyframes threadDraw {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+.awards-container::before {
+  content: '';
+  position: absolute;
+  left: 5.5rem; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(140,37,0,.9) 0%, rgba(140,37,0,.1) 100%);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+.awards-container.spine-in::before {
+  animation: threadDraw 2.5s var(--ease) forwards;
+}
+.award-row { position: relative; }
+.award-row::before {
+  content: '';
+  position: absolute;
+  left: calc(5.5rem - 5px); top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--dk);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+.award-row.node-glow::before { animation: nodeGlow .7s ease-out forwards; }
+
+/* ══════════════════════════════════════════════════════════
+   TALKS — Stage Spotlight
+══════════════════════════════════════════════════════════ */
+.talk-entry { position: relative; }
+.talk-entry::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 85% 70% at 15% 50%, rgba(140,37,0,.09) 0%, transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.1s var(--ease);
+}
+.talk-entry.in::after { opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════
+   SUPERVISION — Research Seed (sprout from top)
+══════════════════════════════════════════════════════════ */
+@keyframes seedSprout {
+  0%   { transform: scaleY(0) scaleX(0.85); opacity: 0; }
+  60%  { transform: scaleY(1.04) scaleX(1.01); opacity: 1; }
+  100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+}
+#supervision .physics-sediment { transform-origin: top center; }
+#supervision .physics-sediment.in { animation: seedSprout .75s var(--ease) forwards; }
+
+/* ══════════════════════════════════════════════════════════
+   ARTICLES — Newspaper Press + Headline Slam
+══════════════════════════════════════════════════════════ */
+@keyframes newsPress {
+  0%   { transform: scaleY(0.88); opacity: 0; }
+  50%  { transform: scaleY(1.02); opacity: 1; }
+  78%  { transform: scaleY(0.99); }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+@keyframes headlineSlam {
+  0%   { transform: translateY(-25px); opacity: 0; }
+  65%  { transform: translateY(4px); opacity: 1; }
+  82%  { transform: translateY(-2px); }
+  100% { transform: translateY(0); opacity: 1; }
+}
+#articles .art-entry.rv      { transform: none; transform-origin: top; }
+#articles .art-entry.rv.in   { animation: newsPress .5s var(--ease) forwards; }
+#articles .art-title         { opacity: 0; }
+#articles .art-entry.in .art-title {
+  animation: headlineSlam .45s cubic-bezier(0.22,1,0.36,1) .18s forwards;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TIMELINE SPINE — line draws node-to-node, each node glows
+══════════════════════════════════════════════════════════ */
+
+/* Transitions for all highlightable elements */
+.pub-title, .award-name, .talk-name, .j-place, .sup-name, .art-title,
+.pub-yr-big, .award-yr, .talk-yr, .j-when, .pub-ref,
+.talk-entry::before, .sup-entry::after, .art-entry::after, 
+.pub-entry::after, .pub-entry::before, .j-row::after {
+  transition: all 0.7s var(--ease);
+}
+
+
+
+@keyframes nodeGlow {
+  0%   { transform: translateY(-50%) scale(0); box-shadow: 0 0 0 0 rgba(140,37,0,.8); }
+  30%  { transform: translateY(-50%) scale(1.5); box-shadow: 0 0 0 10px rgba(140,37,0,.4); }
+  65%  { transform: translateY(-50%) scale(1.1); box-shadow: 0 0 0 18px rgba(140,37,0,0); }
+  100% { transform: translateY(-50%) scale(1); box-shadow: 0 0 8px rgba(140,37,0,0.25); }
+}
+
+/* ── Active Reading Zone Glow ── */
+/* Heading & title highlight when entry is in reading zone */
+.node-glow .pub-title, 
+.node-glow .award-name, 
+.node-glow .talk-name, 
+.node-glow .j-place, 
+.node-glow .sup-inst, 
+.node-glow .art-title {
+  color: var(--terra);
+  text-shadow: 0 0 15px rgba(140,37,0,0.15);
+  transition: all 0.7s var(--ease);
+}
+.node-glow .pub-yr-big,
+.node-glow .award-yr,
+.node-glow .talk-yr,
+.node-glow .j-when,
+.node-glow .sup-yr,
+.node-glow .pub-ref {
+  color: var(--terra);
+  transform: scale(1.08);
+  transition: all 0.5s var(--ease);
+}
+/* Smooth fade-back when leaving reading zone */
+.pub-title, .award-name, .talk-name, .j-place, .sup-inst, .art-title,
+.pub-yr-big, .award-yr, .talk-yr, .j-when, .sup-yr, .pub-ref {
+  transition: all 0.7s var(--ease);
+}
+
+/* Spine containers */
+.talk-list, .sup-list, .art-list, .pub-list, .j-pos-list { position: relative; }
+
+/* Spine lines — positioned in CENTER of gap between columns */
+.talk-list::before, .sup-list::before, .art-list::before,
+.pub-list::before, .j-pos-list::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 2px;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+#talks .talk-list::before       { left: calc(5.5rem + 1rem); background: linear-gradient(to bottom, rgba(140,37,0,.65), rgba(140,37,0,.08)); }
+#supervision .sup-list::before  { left: calc(6.5rem + 1.75rem); background: linear-gradient(to bottom, rgba(140,37,0,.65), rgba(140,37,0,.08)); }
+#articles .art-list::before     { left: calc(6.5rem + 1.75rem); background: linear-gradient(to bottom, rgba(140,37,0,.65), rgba(140,37,0,.08)); }
+#publications .pub-list::before { left: calc(5rem + 1rem); top: -14rem; background: linear-gradient(to bottom, rgba(140,37,0,.65), rgba(140,37,0,.08)); }
+#conferences .pub-list::before  { left: calc(5rem + 1rem); background: linear-gradient(to bottom, rgba(140,37,0,.65), rgba(140,37,0,.08)); }
+.j-pos-list::before             { left: 0; top: 1.25rem; background: linear-gradient(to bottom, rgba(140,37,0,.65), rgba(140,37,0,.08)); }
+
+/* Spine draw — fired by JS spineTimeline */
+.talk-list.spine-in::before, .sup-list.spine-in::before, .art-list.spine-in::before,
+.pub-list.spine-in::before, .j-pos-list.spine-in::before {
+  animation: threadDraw 2.5s var(--ease) forwards;
+}
+
+/* Node dots — centered on the spine lines */
+.talk-entry::before {
+  content: '';
+  position: absolute;
+  left: calc(5.5rem + 1rem - 5px); top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--ash);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+.sup-entry { position: relative; }
+.sup-entry::after {
+  content: '';
+  position: absolute;
+  left: calc(6.5rem + 1.75rem - 5px); top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--ash);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+.art-entry { position: relative; }
+.art-entry::after {
+  content: '';
+  position: absolute;
+  left: calc(6.5rem + 1.75rem - 5px); top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--sand2);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+#publications .pub-entry { position: relative; }
+#publications .pub-entry::after {
+  content: '';
+  position: absolute;
+  left: calc(5rem + 1rem - 5px); top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--sand);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+#conferences .pub-entry::before {
+  content: '';
+  position: absolute;
+  left: calc(5rem + 1rem - 5px); top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--sand);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+#journey .j-row { position: relative; padding-left: 2rem; }
+#journey .j-row::after {
+  content: '';
+  position: absolute;
+  left: -5px; top: 50%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--terra);
+  background: var(--sand2);
+  transform: translateY(-50%) scale(0);
+  z-index: 2;
+}
+.j-pos-list .j-col-head { padding-left: 2rem; }
+
+/* Glow fires on section-scoped dot pseudo-elements ONLY (avoids hitting border/spotlight pseudos) */
+#publications .pub-entry.node-glow::after  { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
+#conferences  .pub-entry.node-glow::before { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
+.talk-entry.node-glow::before              { animation: nodeGlow .7s ease-out forwards; }
+.sup-entry.node-glow::after                { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
+.art-entry.node-glow::after                { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
+#journey .j-row.node-glow::after           { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
+.award-row.node-glow::before               { animation: nodeGlow .7s ease-out forwards; background: var(--terra) !important; }
   </style>
 </head>
 <body>
@@ -786,6 +1889,13 @@ footer {
     <li><a href="#about">About</a></li>
     <li><a href="#research">Research</a></li>
     <li><a href="#publications">Publications</a></li>
+    <li><a href="#conferences">Conferences</a></li>
+    <li><a href="#awards">Awards</a></li>
+    <li><a href="#talks">Talks</a></li>
+    <li><a href="#teaching">Teaching</a></li>
+    <li><a href="#supervision">Supervision</a></li>
+    <li><a href="#articles">Articles</a></li>
+    <li><a href="#service">Service</a></li>
     <li><a href="#journey">Journey</a></li>
   </ul>
 </nav>
@@ -798,23 +1908,10 @@ footer {
   </div>
 
   <div class="hero-body">
-    <!-- 1947 on left, 1992-93 on right — his research subjects -->
-    <div class="hero-dates" aria-label="Research contexts">
-      <div class="date-block">
-        <span class="date-yr">1947</span>
-        <span class="date-label">Partition of India</span>
-      </div>
-      <div class="date-block">
-        <span class="date-yr" style="text-align:right">1992–93</span>
-        <span class="date-label" style="text-align:right">Mumbai Riots</span>
-      </div>
-    </div>
-
     <hr class="hero-divider" aria-hidden="true">
 
     <h1 class="hero-name" id="hero-h1">
-      <span class="prof">Prof.</span>
-      Ninad<em>Patwardhan</em>
+      <span class="h-drop-1">Ninad</span> <em class="h-drop-2">Patwardhan</em>
     </h1>
 
     <hr class="hero-divider2" aria-hidden="true">
@@ -845,9 +1942,9 @@ footer {
   <div class="q-inner">
     <span class="q-label rv">Core Inquiry</span>
     <p class="q-text rv d1">
-      Memory is not a record of what happened.
-      It is a construction of who we needed to be
-      <em>after</em> it did.
+      <span class="q-line">Memory is not a record of what happened.</span>
+      <span class="q-line">It is a construction of who we needed to be</span>
+      <span class="q-line"><em>after</em> it did.</span>
     </p>
     <ul class="q-domains rv d2">
       <li>Autobiographical Memory</li>
@@ -864,6 +1961,18 @@ footer {
 <!-- ════ ABOUT ════ -->
 <section id="about" aria-labelledby="about-h2">
   <div class="about-wrap">
+    <!-- Top Prominent Dates -->
+    <div class="about-dates-top rv">
+      <div class="about-date-item">
+        <span class="about-date-yr" id="about-yr-1">1947</span>
+        <span class="about-date-label">Partition of India</span>
+      </div>
+      <div class="about-date-item">
+        <span class="about-date-yr" id="about-yr-2" style="text-align:right">1992–93</span>
+        <span class="about-date-label" style="text-align:right">Mumbai Riots</span>
+      </div>
+    </div>
+
     <div class="rv">
       <hr class="sec-rule">
       <span class="sec-eyebrow">The Story</span>
@@ -872,19 +1981,19 @@ footer {
       </h2>
     </div>
 
-    <!-- Byline bar -->
+    <!-- Byline bar: Reimagined as Tactile Ledgers -->
     <div class="byline rv d1" role="complementary" aria-label="Profile">
       <div class="bl"><div class="bl-k">Position</div><div class="bl-v">Assistant Professor<br>FLAME University, Pune</div></div>
       <div class="bl"><div class="bl-k">Doctorate</div><div class="bl-v">PhD · IIT Bombay<br>Psychology</div></div>
       <div class="bl"><div class="bl-k">Clinical</div><div class="bl-v">M.Sc. Clinical Psych.<br>Christ University</div></div>
       <div class="bl"><div class="bl-k">Method</div><div class="bl-v">Qualitative<br>Narrative Analysis</div></div>
-      <div class="bl"><div class="bl-k">Published</div><div class="bl-v">5 peer-reviewed works<br>2011 – 2025</div></div>
+      <div class="bl"><div class="bl-k">Published</div><div class="bl-v"><span class="count-up" data-target="6">0</span> Peer-reviewed<br>2011 – 2026</div></div>
     </div>
 
-    <div class="two-col rv d2">
-      <div class="prose">
+    <div class="two-col">
+      <div class="prose rv d2 col-from-left">
         <p>
-          Prof. Ninad Patwardhan works at a precise and unusual crossroads:
+          <span class="drop-cap">P</span>rof. Ninad Patwardhan works at a precise and unusual crossroads:
           between the clinical study of memory and the lived experience of
           historical catastrophe. Trained in clinical psychology at Christ University,
           Bangalore, and holding his doctorate from <strong>IIT Bombay</strong>,
@@ -892,32 +2001,23 @@ footer {
           but memory as something people <em>do</em> — rebuild, perform, and negotiate
           in the face of displacement and violence.
         </p>
+      </div>
+      <div class="prose rv d3 col-from-right">
         <p>
           His sustained research brings him into contact with <strong>Punjabi and
           Sindhi survivors of the 1947 Partition</strong> — communities uprooted
-          in one of history's largest forced migrations. His 2020 paper in
-          <em>Memory Studies</em> showed that ethnic identity shapes not merely
-          what is remembered, but the very structure of selfhood built around that memory:
-          two communities, one catastrophe, two different ways of knowing who you are.
+          in one of history's largest forced migrations. 
         </p>
-      </div>
-      <div class="prose">
         <p>
           His most recent work — published in 2025 in <em>Peace and Conflict:
           Journal of Peace Psychology</em> — examines how survivors of the
-          <strong>1992–93 Mumbai riots</strong> narrate those events decades later.
-          These testimonies reveal the psychological conditions under which peace —
-          not merely the absence of violence — becomes possible at the personal level.
+          <strong>1992–93 Mumbai riots</strong> narrate those events decades later,
+          revealing the psychological conditions under which personal peace becomes possible.
         </p>
         <p>
-          Running alongside this is his clinical research on
-          <strong>expressive writing and health outcomes</strong>:
-          the empirical demonstration that putting difficult personal
-          experience into language produces measurable improvements in wellbeing.
-          It is the same insight approached from a different direction —
-          narrative is not merely how we recall the past, it is how we survive it.
-          At FLAME University, Pune, he brings this entire body of work
-          into the classroom.
+          Running alongside this is his clinical research on <strong>Expressive Writing</strong> —
+          testing how the act of narrating personal trauma can statistically improve 
+          physical health outcomes in Indian contexts.
         </p>
       </div>
     </div>
@@ -933,6 +2033,133 @@ footer {
   </div>
 </section>
 
+
+<!-- ════ TIMELINE STRIP ════ -->
+<div id="timeline-strip" aria-label="Timeline of key dates and publications">
+  <div class="ts-inner">
+    <div class="ts-node">
+      <span class="ts-yr">1947</span>
+      <span class="ts-ev">Partition of India</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">1992–93</span>
+      <span class="ts-ev">Mumbai Riots</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2011</span>
+      <span class="ts-ev">First Publication</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2020</span>
+      <span class="ts-ev">Memory Studies</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2023</span>
+      <span class="ts-ev">Psychological Studies</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2025</span>
+      <span class="ts-ev">Peace &amp; Conflict</span>
+    </div>
+    <div class="ts-node">
+      <span class="ts-yr">2026</span>
+      <span class="ts-ev">JIAAP · ICCP</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ PUBLICATIONS ════ -->
+<section id="publications" aria-labelledby="pubs-h2">
+  <div class="pubs-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">The Archive</span>
+      <h2 class="sec-h2" id="pubs-h2">Selected Publications</h2>
+    </div>
+
+    <ol class="pub-list" style="list-style:none">
+
+      <li class="pub-entry rv">
+        <div class="pub-ref physics-stamp">REF.<br>01<br><span class="pub-yr-big">2026</span></div>
+        <div>
+          <div class="pub-title">Pace of Life, Sensation-Seeking and Health Outcomes: The Indian Context</div>
+          <div class="pub-journal">Journal of the Indian Academy of Applied Psychology, 52, Special Issue, 350–360</div>
+          <div class="pub-auth">Samant, A., &amp; <strong>Patwardhan, N.</strong></div>
+          <div class="pub-find">
+            Pace of life and sensation-seeking dispositions shape health outcomes within an Indian cultural context — where environmental tempo and individual risk appetite intersect in measurable ways.
+          </div>
+          <a href="https://jiaap.in/pace-of-life-sensation-seeking-and-health-outcomes-the-indian-context/" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → JIAAP</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d1">
+        <div class="pub-ref physics-stamp">REF.<br>02<br><span class="pub-yr-big">2025</span></div>
+        <div>
+          <div class="pub-title">Remembering life events during 1992–1993 in Mumbai, India: A narrative identity perspective</div>
+          <div class="pub-journal">Peace and Conflict: Journal of Peace Psychology, 31(1), 73–81</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+          <div class="pub-find">
+            How the riots are narrated decades later reveals the psychological architecture through which identity survives collective violence — and the conditions under which personal peace becomes possible.
+          </div>
+          <a href="https://doi.org/10.1037/pac0000780" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → doi:10.1037/pac0000780</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d2">
+        <div class="pub-ref physics-stamp">REF.<br>03<br><span class="pub-yr-big">2023</span></div>
+        <div>
+          <div class="pub-title">Life's ups and downs: Expressive writing and health outcomes</div>
+          <div class="pub-journal">Psychological Studies, 68, 211–222</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+          <div class="pub-find">
+            Writing through personal difficulty — not around it — produces measurable improvements in health: narrative as clinical intervention, not merely catharsis.
+          </div>
+          <a href="https://link.springer.com/article/10.1007/s12646-022-00701-7" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → Psychological Studies · Springer</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d3">
+        <div class="pub-ref physics-stamp">REF.<br>04<br><span class="pub-yr-big">2020</span></div>
+        <div>
+          <div class="pub-title">Exploring self through memory: Narratives of Punjabi and Sindhi Partition survivors</div>
+          <div class="pub-journal">Memory Studies, 13(4), 617–632</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+          <div class="pub-find">
+            Partition is not one memory shared by all who lived it — ethnic community shapes the very structure of the self reconstructed from that memory.
+          </div>
+          <a href="https://journals.sagepub.com/doi/abs/10.1177/1750698017750001" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → Memory Studies · Sage</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv">
+        <div class="pub-ref physics-stamp">REF.<br>05<br><span class="pub-yr-big">2015</span></div>
+        <div>
+          <div class="pub-title">Factors affecting psychosocial wellbeing and quality of life among women living with HIV/AIDS</div>
+          <div class="pub-journal">NITTE University Journal of Health Science, 5(4), 66–76</div>
+          <div class="pub-auth">Bhat, S.U., Cherian, A.V., Bhat, A., Chapman, H.J., Lukose, A., <strong>Patwardhan, N.</strong>, Satyanarayana, V. &amp; Ramakrishna, J.</div>
+          <div class="pub-find">
+            Psychosocial wellbeing is shaped as much by stigma, support, and structural access as by clinical variables — vulnerability is always relational before it is individual.
+          </div>
+          <a href="https://nitte.edu.in/journal/December%202015/1r.pdf" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → NITTE University Journal</a>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d1">
+        <div class="pub-ref physics-stamp">REF.<br>06<br><span class="pub-yr-big">2011</span></div>
+        <div>
+          <div class="pub-title">Forgiveness, conflict resolution and marital satisfaction among Indian couples</div>
+          <div class="pub-journal">Bombay Psychologist, XXVI, 1 &amp; 2, 74–80</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Mehta, D.</div>
+          <div class="pub-find">
+            Forgiveness mediates conflict and satisfaction in Indian marriages — the capacity to release resentment is a predictor of lasting partnership quality, not merely a moral virtue.
+          </div>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+</section>
 
 <!-- ════ RESEARCH ════ -->
 <section id="research" aria-labelledby="res-h2">
@@ -1017,113 +2244,746 @@ footer {
 </section>
 
 
-<!-- ════ TIMELINE STRIP ════ -->
-<div id="timeline-strip" aria-label="Timeline of key dates and publications">
-  <div class="ts-inner">
-    <div class="ts-node">
-      <span class="ts-yr">1947</span>
-      <span class="ts-ev">Partition of India</span>
-    </div>
-    <div class="ts-node">
-      <span class="ts-yr">1992–93</span>
-      <span class="ts-ev">Mumbai Riots</span>
-    </div>
-    <div class="ts-node">
-      <span class="ts-yr">2011</span>
-      <span class="ts-ev">First Publication</span>
-    </div>
-    <div class="ts-node">
-      <span class="ts-yr">2020</span>
-      <span class="ts-ev">Memory Studies</span>
-    </div>
-    <div class="ts-node">
-      <span class="ts-yr">2023</span>
-      <span class="ts-ev">Psychological Studies</span>
-    </div>
-    <div class="ts-node">
-      <span class="ts-yr">2025</span>
-      <span class="ts-ev">Peace &amp; Conflict</span>
-    </div>
-  </div>
-</div>
-
-
-<!-- ════ PUBLICATIONS ════ -->
-<section id="publications" aria-labelledby="pubs-h2">
-  <div class="pubs-wrap">
+<!-- ════ CONFERENCES ════ -->
+<section id="conferences" aria-labelledby="confs-h2">
+  <div class="confs-wrap">
     <div class="rv">
       <hr class="sec-rule">
-      <span class="sec-eyebrow">The Archive</span>
-      <h2 class="sec-h2" id="pubs-h2">Selected Publications</h2>
+      <span class="sec-eyebrow">International &amp; National Presence</span>
+      <h2 class="sec-h2" id="confs-h2">Conference Papers</h2>
     </div>
 
-    <ol style="list-style:none">
+    <ol class="pub-list" style="list-style:none">
 
       <li class="pub-entry rv">
-        <div class="pub-ref">REF.<br>01<br>2025</div>
+        <div class="pub-ref physics-stamp">2026</div>
         <div>
-          <div class="pub-title">Remembering life events during 1992–1993 in Mumbai, India: A narrative identity perspective</div>
-          <div class="pub-journal">Peace and Conflict: Journal of Peace Psychology, 31(1), 73–81</div>
-          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
-          <div class="pub-find">
-            How the riots are narrated decades later reveals the psychological architecture through which identity survives collective violence — and the conditions under which personal peace becomes possible.
-          </div>
-          <a href="https://doi.org/10.1037/pac0000780" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → doi:10.1037/pac0000780</a>
+          <div class="pub-title">Reimagining Single Screens: Strategic Insights and a Business Model for Urban India</div>
+          <div class="pub-journal">International Conference on Indian Cinema: Social Realities and Managerial Insights · Ranchi, India</div>
+          <div class="pub-auth">Vira, N., Srinivas, M., <strong>Patwardhan, N.</strong>, Mittal, S., &amp; Kaur, M.</div>
         </div>
       </li>
 
       <li class="pub-entry rv d1">
-        <div class="pub-ref">REF.<br>02<br>2023</div>
+        <div class="pub-ref physics-stamp">2021</div>
         <div>
-          <div class="pub-title">Life's ups and downs: Expressive writing and health outcomes</div>
-          <div class="pub-journal">Psychological Studies, 68, 211–222</div>
+          <div class="pub-title">Remembering Positive and Negative Life Events: Associations with Well-being</div>
+          <div class="pub-journal">32nd International Conference of Psychology · Prague, Czech Republic</div>
           <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
-          <div class="pub-find">
-            Writing through personal difficulty — not around it — produces measurable improvements in health: narrative as clinical intervention, not merely catharsis.
-          </div>
-          <a href="https://link.springer.com/article/10.1007/s12646-022-00701-7" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → Psychological Studies · Springer</a>
         </div>
       </li>
 
       <li class="pub-entry rv d2">
-        <div class="pub-ref">REF.<br>03<br>2020</div>
+        <div class="pub-ref physics-stamp">2018</div>
         <div>
-          <div class="pub-title">Exploring self through memory: Narratives of Punjabi and Sindhi Partition survivors</div>
-          <div class="pub-journal">Memory Studies, 13(4), 617–632</div>
+          <div class="pub-title">Autobiographical Memory of the Period 1992–1993</div>
+          <div class="pub-journal">6th International Psychology Congress — Eastern and Western Psychology: Singularity, Diversity, and Integration (IFCU 2018) · Bengaluru, India</div>
           <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
-          <div class="pub-find">
-            Partition is not one memory shared by all who lived it — ethnic community shapes the very structure of the self reconstructed from that memory.
-          </div>
-          <a href="https://journals.sagepub.com/doi/abs/10.1177/1750698017750001" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → Memory Studies · Sage</a>
         </div>
       </li>
 
       <li class="pub-entry rv d3">
-        <div class="pub-ref">REF.<br>04<br>2015</div>
+        <div class="pub-ref physics-stamp">2016</div>
         <div>
-          <div class="pub-title">Factors affecting psychosocial wellbeing and quality of life among women living with HIV/AIDS</div>
-          <div class="pub-journal">NITTE University Journal of Health Science, 5(4), 66–76</div>
-          <div class="pub-auth">Bhat, S.U., Cherian, A.V., Bhat, A., Chapman, H.J., Lukose, A., <strong>Patwardhan, N.</strong>, Satyanarayana, V. &amp; Ramakrishna, J.</div>
-          <div class="pub-find">
-            Psychosocial wellbeing is shaped as much by stigma, support, and structural access as by clinical variables — vulnerability is always relational before it is individual.
-          </div>
-          <a href="https://nitte.edu.in/journal/December%202015/1r.pdf" class="pub-doi" target="_blank" rel="noopener noreferrer">Retrieve → NITTE University Journal</a>
+          <div class="pub-title">Students' Attitudes Towards Bottled Water: An Exploratory Investigation</div>
+          <div class="pub-journal">51st National &amp; 20th International Conference of the Indian Academy of Applied Psychology (IAAP) · Bengaluru, India</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong>, Jadhav, N., Kishore, K., &amp; Sharma, V.</div>
+          <div class="pub-find">Received Prof. Deepak Bhat Award for Best Paper at this conference.</div>
         </div>
       </li>
 
-      <li class="pub-entry rv d4">
-        <div class="pub-ref">REF.<br>05<br>2011</div>
+      <li class="pub-entry rv">
+        <div class="pub-ref physics-stamp">2015</div>
         <div>
-          <div class="pub-title">Forgiveness, conflict resolution and marital satisfaction among Indian couples</div>
-          <div class="pub-journal">Bombay Psychologist, XXVI, 1 &amp; 2, 74–80</div>
+          <div class="pub-title">Exploring Self through Memory: Narratives of Punjabi and Sindhi Partition Survivors</div>
+          <div class="pub-journal">11th Biennial Convention of the Asian Association of Social Psychology (AASP) &amp; 52nd Annual PAP Convention · Cebu City, Philippines</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Kulkarni, M.</div>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d1">
+        <div class="pub-ref physics-stamp">2010</div>
+        <div>
+          <div class="pub-title">Relationship between Perceived Stigma and Forgiveness among People Living with HIV</div>
+          <div class="pub-journal">XXth Annual Convention of the National Academy of Psychology (NAOP) · New Delhi, India</div>
+          <div class="pub-auth"><strong>Patwardhan, N.</strong></div>
+        </div>
+      </li>
+
+      <li class="pub-entry rv d2">
+        <div class="pub-ref physics-stamp">2010</div>
+        <div>
+          <div class="pub-title">Forgiveness, Conflict Resolution and Marital Satisfaction among Indian Couples</div>
+          <div class="pub-journal">National Conference on Peace &amp; Conflict Resolution · Bengaluru, India</div>
           <div class="pub-auth"><strong>Patwardhan, N.</strong> &amp; Mehta, D.</div>
-          <div class="pub-find">
-            Forgiveness mediates conflict and satisfaction in Indian marriages — the capacity to release resentment is a predictor of lasting partnership quality, not merely a moral virtue.
-          </div>
+          <div class="pub-find">Received Best Paper Award at this conference.</div>
         </div>
       </li>
 
     </ol>
+  </div>
+</section>
+
+
+<!-- ════ AWARDS ════ -->
+<section id="awards" aria-labelledby="awards-h2">
+  <div class="awards-wrap">
+    <div class="rv">
+      <hr class="section-rule">
+      <span class="section-eyebrow">Recognition</span>
+      <h2 class="section-h2" id="awards-h2">Fellowships &amp; Awards</h2>
+    </div>
+
+    <div class="awards-container">
+
+      <div class="award-row rv physics-medal">
+        <div class="award-yr">2016</div>
+        <div>
+          <div class="award-name">Prof. Deepak Bhat Award — Best Paper</div>
+          <div class="award-detail">51st National &amp; 20th International Conference of the Indian Academy of Applied Psychology (IAAP), Bangalore. For the paper "Students' Attitudes Towards Bottled Water."</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal d1">
+        <div class="award-yr">2015–18</div>
+        <div>
+          <div class="award-name">Senior Research Fellowship (SRF) in Social Sciences</div>
+          <div class="award-detail">Indian Council of Medical Research (ICMR). Awarded to pursue doctoral research at IIT Bombay.</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal d2">
+        <div class="award-yr">2013–15</div>
+        <div>
+          <div class="award-name">Junior Research Fellowship (JRF) in Social Sciences</div>
+          <div class="award-detail">Indian Council of Medical Research (ICMR). Awarded to pursue doctoral research at IIT Bombay.</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal d3">
+        <div class="award-yr">2011</div>
+        <div>
+          <div class="award-name">National Eligibility Test (NET) for Lectureship — Cleared</div>
+          <div class="award-detail">University Grants Commission (UGC), December 2011.</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal">
+        <div class="award-yr">2011</div>
+        <div>
+          <div class="award-name">Gold Medal — M.Sc. Psychology (Clinical)</div>
+          <div class="award-detail">Awarded by Christ University, Bangalore, for securing the highest aggregate at the M.Sc. Psychology (Clinical) Examination.</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal d1">
+        <div class="award-yr">2010</div>
+        <div>
+          <div class="award-name">Best Paper Award — National Conference on Peace &amp; Conflict Resolution</div>
+          <div class="award-detail">For the paper "Forgiveness, Conflict Resolution, and Marital Satisfaction among Indian Couples," February 2010, Bengaluru.</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal d2">
+        <div class="award-yr">2009–11</div>
+        <div>
+          <div class="award-name">PG Merit Scholarship for University Rank Holders</div>
+          <div class="award-detail">University Grants Commission (UGC) — awarded in 2009 for academic year 2009–2011.</div>
+        </div>
+      </div>
+
+      <div class="award-row rv physics-medal d3">
+        <div class="award-yr">2009</div>
+        <div>
+          <div class="award-name">Gold Medal — Final Year BA</div>
+          <div class="award-detail">University of Mumbai, for securing the highest score in Arts stream at the Final Year BA Examination, 2009.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ TALKS ════ -->
+<section id="talks" aria-labelledby="talks-h2">
+  <div class="talks-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">Public Scholarship</span>
+      <h2 class="sec-h2" id="talks-h2">Invited Talks &amp; Workshops</h2>
+    </div>
+
+    <div class="talk-list">
+
+      <div class="talk-entry rv physics-pinned">
+        <div class="talk-yr physics-medal">2026</div>
+        <div>
+          <span class="talk-badge">Keynote</span>
+          <div class="talk-name">6th International Conference on Counselling and Psychotherapy (ICCP 2026)</div>
+          <div class="talk-venue">Montfort College, Bengaluru · January 7–9, 2026</div>
+          <a href="https://www.iccp2026.com/speakers" class="talk-link" target="_blank" rel="noopener noreferrer">View →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d1">
+        <div class="talk-yr physics-medal">2025</div>
+        <div>
+          <span class="talk-badge">Workshop</span>
+          <div class="talk-name">Coding, Scoring &amp; Interpretation of the Rorschach Test (Beck's and Klopfer's Systems)</div>
+          <div class="talk-venue">Vivekanand College of Arts, Science and Commerce, Mumbai · September 29, 2025</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d2">
+        <div class="talk-yr physics-medal">2025</div>
+        <div>
+          <span class="talk-badge">Seminar</span>
+          <div class="talk-name">Mind Unraveled: A Session on Personality Disorders</div>
+          <div class="talk-venue">R.D. National College, Mumbai · January 17, 2025</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned">
+        <div class="talk-yr physics-medal">2024</div>
+        <div>
+          <span class="talk-badge">Sessions</span>
+          <div class="talk-name">Qualitative Research for Corporate and Clinical Graduate Students of Psychology</div>
+          <div class="talk-venue">St. Aloysius (Deemed to be University) · October 21–22, 2024</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d1">
+        <div class="talk-yr physics-medal">2024</div>
+        <div>
+          <span class="talk-badge">Panel</span>
+          <div class="talk-name">Exploring the Intersections of Gender and Mental Wellbeing</div>
+          <div class="talk-venue">Vidyashilp University · International Women's Day, March 8, 2024</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d2">
+        <div class="talk-yr physics-medal">2023</div>
+        <div>
+          <span class="talk-badge">Panel</span>
+          <div class="talk-name">The Importance of Humanities in Grade 11 and 12</div>
+          <div class="talk-venue">The Samhita Academy, Bengaluru · November 2023</div>
+          <a href="https://www.instagram.com/reel/CzdcD5htOeQ/" class="talk-link" target="_blank" rel="noopener noreferrer">Instagram →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned">
+        <div class="talk-yr physics-medal">2023</div>
+        <div>
+          <span class="talk-badge">Keynote</span>
+          <div class="talk-name">Unravelling the Mind-Body Connection: Conquering Stress from Within</div>
+          <div class="talk-venue">S.S. &amp; L.S. Patkar College &amp; V.P. Varde College, Mumbai · October 10, 2023</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d1">
+        <div class="talk-yr physics-medal">2023</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">21st Century Skills for the Workplace</div>
+          <div class="talk-venue">Goa College of Home Science, Panaji · January 30, 2023</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d2">
+        <div class="talk-yr physics-medal">2023</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Research Conceptualization for Dissertation (Qualitative and Quantitative)</div>
+          <div class="talk-venue">Vivekanand College of Arts, Science and Commerce, Mumbai · January 5, 2023</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned">
+        <div class="talk-yr physics-medal">2022</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Your Thoughts Matter</div>
+          <div class="talk-venue">Unitedworld School of Law (UWSL), Karnavati University, Gandhinagar · November 14, 2022</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d1">
+        <div class="talk-yr physics-medal">2022</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Decision Making as a Psychosocial Competency for Young Adults</div>
+          <div class="talk-venue">St. Aloysius College (Autonomous), Mangalore · June 25, 2022</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv physics-pinned d2">
+        <div class="talk-yr physics-medal">2022</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Psychology and Its Prospects — Launch of PsyCollege YouTube Channel</div>
+          <div class="talk-venue">May 8, 2022</div>
+          <a href="https://www.youtube.com/watch?v=9YOWQr6enrQ" class="talk-link" target="_blank" rel="noopener noreferrer">YouTube →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv">
+        <div class="talk-yr">2022</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Autism — World Autism Day</div>
+          <div class="talk-venue">Neha NutriFit, Mumbai · April 2, 2022</div>
+          <a href="https://www.youtube.com/watch?v=pROmuDKJSy0" class="talk-link" target="_blank" rel="noopener noreferrer">YouTube →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv d1">
+        <div class="talk-yr">2022</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Pathways in Psychology: Prospects after Undergraduate Degree</div>
+          <div class="talk-venue">N.L. Dalmia College of Arts, Science and Commerce, Mumbai · March 10, 2022</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv d2">
+        <div class="talk-yr">2021</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">All Stress Begins with Your Thoughts — World Mental Health Day</div>
+          <div class="talk-venue">SRM University AP · October 9, 2021</div>
+          <a href="https://www.youtube.com/watch?v=JSXFdP8QD6c" class="talk-link" target="_blank" rel="noopener noreferrer">YouTube →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv">
+        <div class="talk-yr">2021</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Resilience</div>
+          <div class="talk-venue">The Green Sofa — Professional Counseling Services · May 22, 2021</div>
+          <a href="https://www.instagram.com/p/CPLETGIluPi/" class="talk-link" target="_blank" rel="noopener noreferrer">Instagram →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv d1">
+        <div class="talk-yr">2021</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Psychology — Speaker Series Digital Series 2021</div>
+          <div class="talk-venue">EdCosmo Education Advisors · April 24, 2021</div>
+          <a href="https://www.youtube.com/watch?v=yjnXPjmo9k4" class="talk-link" target="_blank" rel="noopener noreferrer">YouTube →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv d2">
+        <div class="talk-yr">2021</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Master's Program in Psychology: Christ University</div>
+          <div class="talk-venue">R.D. National College, Mumbai · April 30, 2021</div>
+          <a href="https://www.youtube.com/watch?v=r80_nIAwXvI" class="talk-link" target="_blank" rel="noopener noreferrer">YouTube →</a>
+        </div>
+      </div>
+
+      <div class="talk-entry rv">
+        <div class="talk-yr">2018</div>
+        <div>
+          <span class="talk-badge">Talk</span>
+          <div class="talk-name">Reliability Estimates</div>
+          <div class="talk-venue">St. Andrew's College, Mumbai · August 2018</div>
+        </div>
+      </div>
+
+      <div class="talk-entry rv d1">
+        <div class="talk-yr">2018</div>
+        <div>
+          <span class="talk-badge">Workshop</span>
+          <div class="talk-name">Dissertation Writing</div>
+          <div class="talk-venue">Maniben Nanavati Women's College, Mumbai · March 2018</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ TEACHING ════ -->
+<section id="teaching" aria-labelledby="teaching-h2">
+  <div class="teaching-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">The Classroom</span>
+      <h2 class="sec-h2" id="teaching-h2">Teaching Portfolio</h2>
+    </div>
+
+    <p class="course-group-head">Undergraduate Courses</p>
+    <div class="course-cards">
+      <!-- Psychology Icon -->
+      <div class="course-card rv">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0 .94 4.82 2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0-.94-4.82Z"/><path d="M12 4.5V9"/><path d="M12 15v4.5a2.5 2.5 0 0 1-4.96.46 2.5 2.5 0 0 1-1.98-3 2.5 2.5 0 0 1 .94-4.82 2.5 2.5 0 0 1 4.96-.46 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1-.94 4.82Z"/><path d="m15 15 3.5 3.5"/><path d="m15 9 3.5-3.5"/></svg>
+        <div class="course-name">Introduction to Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Social Icon -->
+      <div class="course-card rv d1">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div class="course-name">Social Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Heart/Positive Icon -->
+      <div class="course-card rv d2">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <div class="course-name">Positive Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Book/Educational Icon -->
+      <div class="course-card rv">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6.5 2v18"/></svg>
+        <div class="course-name">Educational Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Assessment/Clipboard Icon -->
+      <div class="course-card rv d1">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+        <div class="course-name">Psychological Testing and Assessment</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Cognitive/Brain Icon -->
+      <div class="course-card rv d2">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-1.98-3 2.5 2.5 0 0 1 .94-4.82 2.5 2.5 0 0 1 4.96-.44 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1-.94 4.82Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0-.94-4.82 2.5 2.5 0 0 0-4.96-.44 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0 .94 4.82Z"/></svg>
+        <div class="course-name">Cognitive Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Personality Icon -->
+      <div class="course-card rv">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="course-name">Personality and Individual Differences</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Research/Magnifier Icon -->
+      <div class="course-card rv d1">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <div class="course-name">Research Methodology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- History Icon -->
+      <div class="course-card rv d2">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="course-name">History of Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Practicals Icon -->
+      <div class="course-card rv">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>
+        <div class="course-name">Psychology Practicals</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Developmental/Tree Icon -->
+      <div class="course-card rv d1">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m9 9 3-3 3 3"/><path d="m9 13 3-3 3 3"/></svg>
+        <div class="course-name">Developmental Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+
+      <!-- Cross-Cultural Icon -->
+      <div class="course-card rv d2">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/><path d="M2 12a14.5 14.5 0 0 0 20 0"/></svg>
+        <div class="course-name">Cross-Cultural Psychology</div>
+        <div class="course-dot"></div>
+      </div>
+    </div>
+
+    <p class="course-group-head">Postgraduate Courses</p>
+    <div class="course-cards">
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-5"/></svg><div class="course-name">Industrial Psychology</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/><path d="M2 12a14.5 14.5 0 0 0 20 0"/></svg><div class="course-name">Cultural Psychology</div><div class="course-dot"></div></div>
+      <div class="course-card rv d2"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M17 3.13a4 4 0 0 1 0 7.75"/></svg><div class="course-name">Workplace Relationships</div><div class="course-dot"></div></div>
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-1.98-3 2.5 2.5 0 0 1 .94-4.82 2.5 2.5 0 0 1 4.96-.44 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1-.94 4.82Z"/></svg><div class="course-name">Neurocognition</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/><path d="M2 12a14.5 14.5 0 0 0 20 0"/></svg><div class="course-name">Multiculturalism: Theory &amp; Practice</div><div class="course-dot"></div></div>
+      <div class="course-card rv d2"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><div class="course-name">Psychotherapy</div><div class="course-dot"></div></div>
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="course-name">Personality Psychology</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="course-name">Employee Counselling</div><div class="course-dot"></div></div>
+      <div class="course-card rv d2"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-5"/></svg><div class="course-name">Organizational Behavior</div><div class="course-dot"></div></div>
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><div class="course-name">Occupational Health and Safety</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><div class="course-name">Research Methods in Psychology</div><div class="course-dot"></div></div>
+      <div class="course-card rv d2"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m9 9 3-3 3 3"/></svg><div class="course-name">Evolutionary Psychology</div><div class="course-dot"></div></div>
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg><div class="course-name">Clinical Psychopathology</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><div class="course-name">Psychological Assessment</div><div class="course-dot"></div></div>
+    </div>
+
+    <p class="course-group-head">Generic &amp; Special Courses</p>
+    <div class="course-cards">
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 18-18M3 3l18 18"/></svg><div class="course-name">Liberal Arts: Perspectives &amp; Approaches</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="course-name">Influencing People</div><div class="course-dot"></div></div>
+      <div class="course-card rv d2"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><div class="course-name">Psychology for Everyday Living</div><div class="course-dot"></div></div>
+      <div class="course-card rv"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><circle cx="12" cy="12" r="10"/></svg><div class="course-name">Psychology for Design</div><div class="course-dot"></div></div>
+      <div class="course-card rv d1"><svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="course-name">Community Engagement and Service Experience</div><div class="course-dot"></div></div>
+      <div class="course-card rv d2">
+        <svg class="course-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-5"/></svg>
+        <div class="course-name">Psychology for Management <span style="font-family:var(--fm);font-size:.5rem;color:var(--terra);letter-spacing:.12em;text-transform:uppercase;margin-left:.35rem">DALHAM Learning</span></div>
+        <div class="course-dot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ SUPERVISION ════ -->
+<section id="supervision" aria-labelledby="sup-h2">
+  <div class="sup-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">Research Mentorship</span>
+      <h2 class="sec-h2" id="sup-h2">Research Supervision</h2>
+    </div>
+
+    <div class="sup-list">
+      <div class="sup-entry rv physics-sediment" data-year="2025">
+        <div class="sup-yr">2025–26</div>
+        <div>
+          <div class="sup-inst">FLAME University, Pune — Discover India Project</div>
+          <div class="sup-proj">"Heera, Trust and Trade: Exploring the Changing Values within the Diamond Trade Between Surat and Mumbai"</div>
+        </div>
+      </div>
+      <div class="sup-entry rv physics-sediment d1" data-year="2024">
+        <div class="sup-yr">2024–25</div>
+        <div>
+          <div class="sup-inst">FLAME University, Pune — Discover India Project</div>
+          <div class="sup-proj">"Kajucho Provas: From Tradition to Trade"</div>
+        </div>
+      </div>
+      <div class="sup-entry rv physics-sediment d2" data-year="2023">
+        <div class="sup-yr">2023–<br>ongoing</div>
+        <div>
+          <div class="sup-inst">Kishinchand Chellaram (K.C.) College — HSNC University, Mumbai</div>
+          <div class="sup-proj">Supervising dissertations of students pursuing Master's (MA) in Psychology</div>
+        </div>
+      </div>
+      <div class="sup-entry rv physics-sediment" data-year="2020">
+        <div class="sup-yr">2020–23</div>
+        <div>
+          <div class="sup-inst">St. Xavier's College (Autonomous), Mumbai</div>
+          <div class="sup-proj">Supervised dissertations of students pursuing Master's (MA) in Lifespan Counselling</div>
+        </div>
+      </div>
+      <div class="sup-entry rv physics-sediment d1" data-year="2019">
+        <div class="sup-yr">2019–21</div>
+        <div>
+          <div class="sup-inst">FLAME University, Pune — FLAME Scholars Program (FSP)</div>
+          <div class="sup-proj">Supervised dissertations for FSP — equivalent to Postgraduate Diploma in Interdisciplinary Studies and Research</div>
+        </div>
+      </div>
+      <div class="sup-entry rv physics-sediment d2" data-year="2019">
+        <div class="sup-yr">2019–20</div>
+        <div>
+          <div class="sup-inst">FLAME University, Pune — Discover India Project</div>
+          <div class="sup-proj">"Piplantri: Trees of Women Empowerment, bearing the fruits of self-sustenance"</div>
+        </div>
+      </div>
+      <div class="sup-entry rv physics-sediment" data-year="2018">
+        <div class="sup-yr">2018–23</div>
+        <div>
+          <div class="sup-inst">NMIMS University, Mumbai — Jyoti Dalal School of Liberal Arts</div>
+          <div class="sup-proj">Supervised Independent Study Project (ISP) of students pursuing BA (Hons.) in Liberal Arts with Psychology major</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rv d2" style="margin-top:3.5rem">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow" style="margin-top:.75rem;display:block">Internship Mentorship</span>
+      <h3 style="font-family:var(--fd);font-size:1.5rem;font-weight:400;color:var(--dark);margin:1rem 0 1.25rem">Internship Supervision</h3>
+      <p style="font-family:var(--fb);font-size:.95rem;color:var(--body);line-height:1.75;max-width:740px">
+        Faculty Mentor for Summer Internship Program (SIP) at <strong>SRM University AP</strong> (2022) and <strong>FLAME University, Pune</strong> (2019–2021).
+        Faculty Mentor for Developmental Activities Program (DAP) at <strong>FLAME University, Pune</strong> (2019–2020).
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ INDUSTRY ════ -->
+<section id="industry" style="background:var(--sand2);padding:8rem max(2rem,4vw)" aria-labelledby="industry-h2">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">Beyond the Academy</span>
+      <h2 class="sec-h2" id="industry-h2">Industry Experience</h2>
+    </div>
+    <div class="j-row rv physics-reel d1" data-year="2018" style="max-width:820px;border-top:2px solid var(--rule-s)">
+      <div class="j-when physics-tick">06/2018–<br>Ongoing</div>
+      <div>
+        <div class="j-place">Finlatics: Enabling Insights · Fincrux Technologies, India</div>
+        <div class="j-role">Consulting Psychologist</div>
+        <p style="font-family:var(--fb);font-size:.9rem;color:var(--body);line-height:1.7;margin-top:.65rem">Defined and designed <em style="font-style:normal;color:var(--terra);font-family:var(--fd)">eCode</em> — the psychometric game module for Finlatics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ ARTICLES ════ -->
+<section id="articles" aria-labelledby="articles-h2">
+  <div class="art-wrap">
+    <div class="rv">
+      <hr class="sec-rule">
+      <span class="sec-eyebrow">Public Writing</span>
+      <h2 class="sec-h2" id="articles-h2">Online Articles</h2>
+    </div>
+
+    <div class="art-list">
+
+      <div class="art-entry rv">
+        <div class="art-yr physics-spring">2025</div>
+        <div>
+          <div class="art-title">Broadcasting Hope: Media's Role in Shaping Collective Resilience</div>
+          <div class="art-outlet">The Academic Insights · June 2025</div>
+          <div class="art-auth">Kovvuri, G., &amp; <strong>Patwardhan, N.</strong></div>
+          <a href="https://theacademicinsights.com/broadcasting-hope-medias-role-in-shaping-collective-resilience/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv d1">
+        <div class="art-yr physics-spring">2025</div>
+        <div>
+          <div class="art-title">How University Rankings Are Reshaping Quality, Culture, and the Future of Higher Education</div>
+          <div class="art-outlet">Higher Education Plus · November 2025</div>
+          <div class="art-auth"><strong>Patwardhan, N.</strong></div>
+          <a href="https://highereducationplus.com/how-university-rankings-are-reshaping-quality-culture-and-the-future-of-higher-education/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv d2">
+        <div class="art-yr">2025</div>
+        <div>
+          <div class="art-title">Future-Proofing Careers in Sustainability: Skills Students Must Build Today</div>
+          <div class="art-outlet">Higher Education Plus · September 2025</div>
+          <div class="art-auth"><strong>Patwardhan, N.</strong></div>
+          <a href="https://highereducationplus.com/future-proofing-careers-in-sustainability-skills-students-must-build-today/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv">
+        <div class="art-yr">2025</div>
+        <div>
+          <div class="art-title">Determinants of Leadership in Higher Education Institutions of India and the United States</div>
+          <div class="art-outlet">Higher Education Plus · August 2025</div>
+          <div class="art-auth">Srinivas, M., Kaur, M., &amp; <strong>Patwardhan, N.</strong></div>
+          <a href="https://highereducationplus.com/determinants-of-leadership-in-higher-education-institutions-of-india-and-the-united-states-of-america/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv d1">
+        <div class="art-yr">2025</div>
+        <div>
+          <div class="art-title">We Grew Up with the Movies, Now the Movies Are Growing Up with Us</div>
+          <div class="art-outlet">The Daily Truth · August 2025</div>
+          <div class="art-auth">Vira, N., Srinivas, M., <strong>Patwardhan, N.</strong>, &amp; Kaur, M.</div>
+        </div>
+      </div>
+
+      <div class="art-entry rv d2">
+        <div class="art-yr">2025</div>
+        <div>
+          <div class="art-title">Death of Single Screens and a Viewing Culture</div>
+          <div class="art-outlet">The Tribune · July 2025</div>
+          <div class="art-auth">Vira, N., <strong>Patwardhan, N.</strong>, &amp; Srinivas, M.</div>
+          <a href="https://www.tribuneindia.com/news/features/death-of-single-screen-theatres-and-a-viewing-culture/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv">
+        <div class="art-yr">2025</div>
+        <div>
+          <div class="art-title">The Sense of Belonging — The Invisible Pillar of Student Success</div>
+          <div class="art-outlet">The Academic Insights · June 2025</div>
+          <div class="art-auth">Kovvuri, G., &amp; <strong>Patwardhan, N.</strong></div>
+          <a href="https://theacademicinsights.com/the-sense-of-belonging-the-invisible-pillar-of-student-success/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv d1">
+        <div class="art-yr">2020</div>
+        <div>
+          <div class="art-title">Delivering a Successful Webinar Presentation</div>
+          <div class="art-outlet">The Academic Insights · July 2020</div>
+          <div class="art-auth"><strong>Patwardhan, N.</strong></div>
+          <a href="https://theacademicinsights.com/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv d2">
+        <div class="art-yr">2020</div>
+        <div>
+          <div class="art-title">Liberal Arts: New Gateway to Success</div>
+          <div class="art-outlet">BW Education · May 8, 2020</div>
+          <div class="art-auth"><strong>Patwardhan, N.</strong></div>
+          <a href="http://bweducation.businessworld.in/article/Liberal-Arts-New-Gateway-To-Success-/08-05-2020-191553/" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+      <div class="art-entry rv">
+        <div class="art-yr">2020</div>
+        <div>
+          <div class="art-title">Thriving during the COVID-19 Pandemic</div>
+          <div class="art-outlet">Entrepreneur India · April 21, 2020 · Also in Biospectrum India, May 2020</div>
+          <div class="art-auth"><strong>Patwardhan, N.</strong></div>
+          <a href="https://www.entrepreneur.com/article/349563" class="art-link" target="_blank" rel="noopener noreferrer">Read →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════ SERVICE ════ -->
+<section id="service" aria-labelledby="service-h2">
+  <div class="service-wrap">
+    <div class="rv">
+      <hr class="section-rule">
+      <span class="section-eyebrow">Service &amp; Outreach</span>
+      <h2 class="section-h2" id="service-h2">Miscellaneous</h2>
+    </div>
+
+    <div class="svc-grid">
+
+      <div class="svc-item rv">
+        <div class="svc-label">Academic Advisor</div>
+        <div class="svc-text">Undergraduate and Postgraduate Programs, Department of Psychology, St. Aloysius (Deemed-to-be-University)</div>
+        <div class="svc-sub">April 2018 — ongoing</div>
+      </div>
+
+      <div class="svc-item rv d1">
+        <div class="svc-label">External Examiner</div>
+        <div class="svc-text">Master's Dissertation Presentations — Nagindas Khandwala College of Commerce, Arts &amp; Management Studies and Shantaben Nagindas Khandwala College of Science; Kishinchand Chellaram College — HSNC University, Mumbai</div>
+      </div>
+
+      <div class="svc-item rv d2">
+        <div class="svc-label">Board of Studies — L.S. Raheja College</div>
+        <div class="svc-text">Member, Board of Studies in Psychology, L.S. Raheja College of Arts and Commerce</div>
+        <div class="svc-sub">April 2024 — ongoing</div>
+      </div>
+
+      <div class="svc-item rv d3">
+        <div class="svc-label">Board of Studies — Nagindas Khandwala College</div>
+        <div class="svc-text">Member, Board of Studies in Psychology, Nagindas Khandwala College of Commerce, Arts &amp; Management Studies and Shantaben Nagindas Khandwala College of Science</div>
+        <div class="svc-sub">December 2018 — ongoing</div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -1137,20 +2997,34 @@ footer {
       <h2 class="sec-h2" id="journey-h2">Academic Record</h2>
     </div>
 
-    <div class="journey-cols rv d1">
-      <div>
+    <div class="journey-cols">
+      <div class="j-pos-list">
         <div class="j-col-head">Positions Held</div>
-        <div class="j-row"><div class="j-when">Now</div><div><div class="j-place">FLAME University, Pune</div><div class="j-role">Assistant Professor — Psychology</div></div></div>
-        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">Vidyashilp University, Bengaluru</div><div class="j-role">Member Secretary, Board of Studies — BA (Hons.)</div></div></div>
-        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">Karnavati University, Gandhinagar</div><div class="j-role">Assistant Director, Liberal Arts · USLM</div></div></div>
-        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">SRM University AP, Mangalagiri</div><div class="j-role">Faculty Coordinator, Psychology · Member Convenor, BOS</div></div></div>
-        <div class="j-row"><div class="j-when">Prior</div><div><div class="j-place">NMIMS (Deemed-to-be-University), Mumbai</div><div class="j-role">Faculty</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2024">
+          <div class="j-when physics-tick">07/2024–<br>Now</div><div><div class="j-place">FLAME University, Pune</div><div class="j-role">Assistant Professor — Psychology · FLAME School of Liberal Education</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2023">
+          <div class="j-when physics-tick">07/2023–<br>05/2024</div><div><div class="j-place">Vidyashilp University, Bengaluru</div><div class="j-role">Assistant Professor — Psychology · SLADS · Member Secretary, Board of Studies, BA (Hons.)</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2022">
+          <div class="j-when physics-tick">08/2022–<br>12/2022</div><div><div class="j-place">Karnavati University, Gandhinagar</div><div class="j-role">Assistant Professor &amp; Assistant Director, Liberal Arts · USLM</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2021">
+          <div class="j-when physics-tick">08/2021–<br>08/2022</div><div><div class="j-place">SRM University AP, Mangalagiri</div><div class="j-role">Assistant Professor — Psychology · Faculty Coordinator · Member Convenor, BOS</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2018">
+          <div class="j-when physics-tick">12/2018–<br>07/2021</div><div><div class="j-place">FLAME University, Pune</div><div class="j-role">Assistant Professor — Psychology · FLAME School of Liberal Education</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2018">
+          <div class="j-when physics-tick">07/2018–<br>11/2018</div><div><div class="j-place">NMIMS (Deemed-to-be-University), Mumbai</div><div class="j-role">Assistant Professor — Psychology · Jyoti Dalal School of Liberal Arts</div></div></div>
+        <div class="j-row rv physics-reel" data-year="2013">
+          <div class="j-when physics-tick">01/2013–<br>01/2018</div><div><div class="j-place">IIT Bombay — Dept. of Humanities &amp; Social Sciences</div><div class="j-role">ICMR JRF (2013–2015) · ICMR SRF (2015–2018) · Research Fellow (2018)</div></div></div>
       </div>
       <div>
         <div class="j-col-head">Academic Formation</div>
-        <div class="edu-item"><div class="edu-deg">PhD in Psychology</div><div class="edu-uni">Indian Institute of Technology Bombay, Mumbai</div><span class="edu-badge">Doctoral Degree</span></div>
-        <div class="edu-item"><div class="edu-deg">M.Sc. in Psychology (Clinical)</div><div class="edu-uni">Christ University, Bangalore</div><span class="edu-badge">Postgraduate</span></div>
-        <div class="edu-item"><div class="edu-deg">B.A. with Psychology Major</div><div class="edu-uni">St. Xavier's College, Mumbai · University of Mumbai</div><span class="edu-badge">Undergraduate</span></div>
+        <div class="edu-item"><div class="edu-deg">PhD in Psychology</div><div class="edu-uni">Indian Institute of Technology Bombay, Mumbai · January 2013 – August 2020</div><span class="edu-badge">Dissertation: "Remembering Life Events: Associations with Well-being"</span></div>
+        <div class="edu-item"><div class="edu-deg">M.Sc. in Psychology (Clinical)</div><div class="edu-uni">Christ University, Bangalore · 2009 – 2011</div><span class="edu-badge">Gold Medal — Highest Aggregate</span></div>
+        <div class="edu-item"><div class="edu-deg">B.A. with Psychology Major</div><div class="edu-uni">St. Xavier's College, University of Mumbai · 2006 – 2009</div><span class="edu-badge">Gold Medal — Highest Score, Arts Stream</span></div>
+
+        <div class="j-col-head" style="margin-top:2.5rem">Visiting Faculty</div>
+        <p style="font-family:var(--fb);font-size:.88rem;color:var(--body);line-height:1.85;padding-top:.9rem;border-top:1px solid var(--rule)">
+          Nagindas Khandwala College, Mumbai · School of Design, NMIMS University · Jyoti Dalal School of Liberal Arts (NMIMS) · VES College of Arts, Science and Commerce, Mumbai · MMP Shah College (SNDT Women's University) · RD National College, Mumbai · SNDT Women's University (Churchgate Campus) · D.Y. Patil College of Occupational Therapy, Mumbai
+        </p>
       </div>
     </div>
   </div>
@@ -1179,11 +3053,11 @@ footer {
 
 
 <script>
-  /* Nav scroll pin */
+  /* ── Nav scroll pin ── */
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 40), { passive: true });
 
-  /* Mobile nav */
+  /* ── Mobile nav ── */
   const ham = document.getElementById('nav-ham');
   const nl  = document.getElementById('nav-links');
   ham.addEventListener('click', () => {
@@ -1195,12 +3069,328 @@ footer {
     ham.setAttribute('aria-expanded', 'false');
   }));
 
-  /* Scroll reveals */
+  /* ────────────────────────────────────────────────────
+     HERO: Ghost Text "MEMORY" letter reveal
+  ──────────────────────────────────────────────────── */
+  (function splitGhostMemory() {
+    const ghost = document.querySelector('.hero-ghost span');
+    if (!ghost) return;
+    const text = ghost.textContent.trim();
+    ghost.innerHTML = '';
+    text.split('').forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      s.style.transitionDelay = (0.4 + i * 0.12) + 's';
+      ghost.appendChild(s);
+    });
+  })();
+
+  /* ────────────────────────────────────────────────────
+     HERO: Split name into letter spans (disabled for hDrop)
+  ──────────────────────────────────────────────────── */
+  (function splitHeroName() {
+    const h1 = document.getElementById('hero-h1');
+    if (!h1) return;
+    // Walk child nodes: wrap text chars and <em> chars
+    const newChildren = [];
+    let globalIdx = 0;
+    h1.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent.replace(/\s+/g, '');
+        if (!text) { newChildren.push(node.cloneNode()); return; }
+        text.split('').forEach(ch => {
+          const span = document.createElement('span');
+          span.className = 'letter-span';
+          span.style.animationDelay = (0.38 + globalIdx * 0.045) + 's';
+          span.textContent = ch;
+          newChildren.push(span);
+          globalIdx++;
+        });
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'EM') {
+        const em = document.createElement('em');
+        node.textContent.split('').forEach(ch => {
+          const span = document.createElement('span');
+          span.className = 'letter-span';
+          span.style.animationDelay = (0.38 + globalIdx * 0.045) + 's';
+          span.textContent = ch;
+          em.appendChild(span);
+          globalIdx++;
+        });
+        newChildren.push(em);
+      } else {
+        newChildren.push(node.cloneNode(true));
+      }
+    });
+    h1.innerHTML = '';
+    newChildren.forEach(c => h1.appendChild(c));
+  })();
+
+  /* ────────────────────────────────────────────────────
+     HERO: Count up years (1947 and 1992)
+  ──────────────────────────────────────────────────── */
+  function countUp(el, target, duration, suffix) {
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(ease * target) + (suffix || '');
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target + (suffix || '');
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    // Hero date count-ups
+    document.querySelectorAll('.date-yr').forEach(el => {
+      const raw = el.textContent.trim();
+      const match = raw.match(/(\d{4})/);
+      if (!match) return;
+      const target = parseInt(match[1]);
+      const suffix = raw.includes('–') ? '–93' : '';
+      el.textContent = '0';
+      setTimeout(() => countUp(el, target, 1600, suffix), 300);
+    });
+  });
+
+  /* ────────────────────────────────────────────────────
+     SCROLL REVEALS — generic .rv
+  ──────────────────────────────────────────────────── */
+  /* Repeating observer — all .rv except talks & supervision */
   const io = new IntersectionObserver(
-    entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
-    { threshold: 0.08 }
+    entries => entries.forEach(e => {
+      e.target.classList.toggle('in', e.isIntersecting);
+    }),
+    { threshold: 0.05, rootMargin: '0px 0px -30px 0px' }
   );
-  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+  document.querySelectorAll('.rv').forEach(el => {
+    if (!el.closest('#talks, #supervision')) io.observe(el);
+  });
+
+  /* One-time observer — talks & supervision fire once on scroll down */
+  const ioOnce = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); ioOnce.unobserve(e.target); }
+    }),
+    { threshold: 0.05, rootMargin: '0px 0px -30px 0px' }
+  );
+  document.querySelectorAll('#talks .rv, #supervision .rv').forEach(el => ioOnce.observe(el));
+
+  /* ────────────────────────────────────────────────────
+     HERO — Motion system
+  ──────────────────────────────────────────────────── */
+  const heroSection = document.getElementById('hero');
+
+  function slotMachine(el, targetStr, duration = 1200) {
+    const digits = targetStr.split('');
+    let startTime = null;
+    function update(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      el.innerHTML = digits.map(char => {
+        if (isNaN(parseInt(char))) return char;
+        if (progress === 1) return char;
+        return Math.floor(Math.random() * 10);
+      }).join('');
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  if (heroSection) {
+    /* ── Word Drop: split name words into individual letter spans ── */
+    ['h-drop-1', 'h-drop-2'].forEach(cls => {
+      const el = heroSection.querySelector('.' + cls);
+      if (!el) return;
+      const original = el.textContent;
+      el.innerHTML = original.split('').map((ch, i) =>
+        `<span class="h-letter" style="animation-delay:${(0.35 + i * 0.045).toFixed(3)}s">${ch === ' ' ? '&nbsp;' : ch}</span>`
+      ).join('');
+    });
+
+    /* ── Hero IntersectionObserver ── */
+    const hio = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        heroSection.classList.add('hero-in');
+      } else {
+        heroSection.classList.remove('hero-in');
+      }
+    }, { threshold: 0.1 });
+    hio.observe(heroSection);
+
+    /* ── Ghost Word Parallax (scroll-linked) ── */
+    const heroGhost = heroSection.querySelector('.hero-ghost');
+    if (heroGhost) {
+      window.addEventListener('scroll', () => {
+        const rect = heroSection.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          heroGhost.style.transform = `translate(-50%, calc(-50% + ${window.scrollY * 0.28}px))`;
+        }
+      }, { passive: true });
+    }
+  }
+
+  /* ────────────────────────────────────────────────────
+     QUESTION BAND — fade from black
+  ──────────────────────────────────────────────────── */
+  const qSection = document.getElementById('question');
+  if (qSection) {
+    const qio = new IntersectionObserver(([e]) => {
+      qSection.classList.toggle('q-lit', e.isIntersecting);
+    }, { threshold: 0.05 });
+    qio.observe(qSection);
+
+    /* ── Background Depth Shift (scroll-linked) ── */
+    const qBefore = qSection;
+    window.addEventListener('scroll', () => {
+      const rect = qBefore.getBoundingClientRect();
+      if (rect.bottom > 0 && rect.top < window.innerHeight) {
+        const progress = (window.innerHeight / 2 - rect.top) * 0.12;
+        qSection.style.setProperty('--q-shift', `${progress}px`);
+        const pseudo = qSection.querySelector('.q-inner');
+        if (pseudo) qSection.style.backgroundPositionY = `${progress * 0.5}px`;
+      }
+    }, { passive: true });
+  }
+
+  /* ────────────────────────────────────────────────────
+     ABOUT — count-up for published works + Background Dates
+  ──────────────────────────────────────────────────── */
+  document.querySelectorAll('.count-up').forEach(el => {
+    const target = parseInt(el.getAttribute('data-target'));
+    const cio = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { countUp(el, target, 900, ''); }
+      else { el.textContent = '0'; }
+    }, { threshold: 0.3 });
+    cio.observe(el);
+  });
+
+  const aboutSection = document.getElementById('about');
+  const aboutYr1 = document.getElementById('about-yr-1');
+  const aboutYr2 = document.getElementById('about-yr-2');
+  if (aboutSection) {
+    const abio = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        slotMachine(aboutYr1, '1947');
+        slotMachine(aboutYr2, '1992–93');
+      } else {
+        if (aboutYr1) aboutYr1.textContent = '0000';
+        if (aboutYr2) aboutYr2.textContent = '0000–00';
+      }
+    }, { threshold: 0.1 });
+    abio.observe(aboutSection);
+  }
+
+  /* ────────────────────────────────────────────────────
+     Physics Stagger Observer
+  ──────────────────────────────────────────────────── */
+  const staggerObserve = (selector, animClass, baseDelay, once = false) => {
+    const sio = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        const el = e.target;
+        if (e.isIntersecting) {
+          const idx = Array.from(el.parentElement.children).indexOf(el);
+          el.style.animationDelay = (idx * baseDelay).toFixed(2) + 's';
+          if (el.classList.contains('physics-sediment')) {
+            const year = parseInt(el.getAttribute('data-year')) || 2025;
+            el.style.animationDuration = (0.5 + (2026 - year) / 100).toFixed(2) + 's';
+          }
+          el.classList.add(animClass);
+          if (once) sio.unobserve(el);
+        } else if (!once) {
+          el.classList.remove(animClass);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(selector).forEach(el => sio.observe(el));
+  };
+
+  staggerObserve('.physics-stamp',    'in', 0.12);
+  staggerObserve('.physics-medal',    'in', 0.15);
+  staggerObserve('.physics-pinned',   'in', 0.18, true);  /* talks — one-time */
+  staggerObserve('.physics-sediment', 'in', 0.10, true);  /* supervision — one-time */
+  staggerObserve('.physics-reel',     'in', 0.18);
+  staggerObserve('.physics-spring',   'in', 0.10);
+
+  const microIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      e.target.classList.toggle('in', e.isIntersecting);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.physics-tick').forEach(el => microIO.observe(el));
+
+  /* ────────────────────────────────────────────────────
+     Timeline strip wire
+  ──────────────────────────────────────────────────── */
+  /* ── Spine timeline: replays every time section heading enters viewport ── */
+  function spineTimeline(containerSel, entrySelector) {
+    const container = document.querySelector(containerSel);
+    if (!container) return;
+
+    /* 1. Spine line — re-triggers every time the section heading enters viewport */
+    const section = container.closest('section') || container.parentElement;
+    const headingTrigger = (section && section.querySelector('h2')) || container;
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        container.classList.remove('spine-in');
+        container.getBoundingClientRect(); /* force layout flush — restarts pseudo-element animation */
+        container.classList.add('spine-in');
+      }
+    }, { threshold: 0.1 }).observe(headingTrigger);
+
+    /* 2. Per-node observers — nodes re-glow every time they cross the viewport center */
+    Array.from(container.querySelectorAll(entrySelector)).forEach(entry => {
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) {
+          entry.classList.add('node-glow');
+        } else {
+          entry.classList.remove('node-glow');
+        }
+      }, { rootMargin: '-42% 0px -42% 0px', threshold: 0 }).observe(entry);
+    });
+  }
+
+  spineTimeline('.awards-container',       '.award-row');
+  spineTimeline('#talks .talk-list',       '.talk-entry');
+  spineTimeline('#supervision .sup-list',  '.sup-entry');
+  spineTimeline('#articles .art-list',     '.art-entry');
+  spineTimeline('#publications .pub-list', '.pub-entry');
+  spineTimeline('#conferences .pub-list',  '.pub-entry');
+  spineTimeline('.j-pos-list',             '.j-row');
+
+  const tsStrip = document.getElementById('timeline-strip');
+  if (tsStrip) {
+    const nodes = tsStrip.querySelectorAll('.ts-node');
+    const ttio = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        nodes.forEach((node, idx) => {
+          node.style.animationDelay = (0.2 + idx * 0.12) + 's';
+          node.classList.add('in');
+        });
+      } else {
+        nodes.forEach(node => node.classList.remove('in'));
+      }
+    }, { threshold: 0.2 });
+    ttio.observe(tsStrip);
+
+    /* ── Depth Parallax ── */
+    window.addEventListener('scroll', () => {
+      const rect = tsStrip.getBoundingClientRect();
+      const winH = window.innerHeight;
+      if (rect.top < winH && rect.bottom > 0) {
+        const speed = 0.08;
+        const shift = (rect.top - winH / 2) * speed;
+        nodes.forEach((node, idx) => {
+          const factor = 1 + (idx * 0.1); // different layers of depth
+          node.style.transform = `translateX(${shift * factor}px)`;
+        });
+      }
+    }, { passive: true });
+  }
+
+  /* ────────────────────────────────────────────────────
+     TEACHING — Library Card Tilt Removed
+  ──────────────────────────────────────────────────── */
 </script>
 
 </body>

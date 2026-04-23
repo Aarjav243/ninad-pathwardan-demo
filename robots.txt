@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ninad-pathwardan-demo.vercel.app/sitemap.xml
+Sitemap: https://prof-ninad-pathwardan-demo-df3gt4r82.vercel.app/sitemap.xml
